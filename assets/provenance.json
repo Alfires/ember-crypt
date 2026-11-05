@@ -1,0 +1,221 @@
+{
+  "assets": [
+    {
+      "id": "polyhaven.pine_sapling_small",
+      "title": "Pine Sapling Small",
+      "author": "Rob Tuytel; Rico Cilliers",
+      "source": "https://polyhaven.com/a/pine_sapling_small",
+      "license": "CC0-1.0",
+      "retrieved": "2026-11-05",
+      "modifications": "Source model/texture files unchanged; no derived runtime scenes copied.",
+      "files": [
+        {
+          "path": "assets/models/pine_sapling_small/pine_sapling_small_1k.gltf",
+          "sha256": "f358c01926861dd082f32dba60f7c9fba232b585a985cf38c0d2229eecf4bc48",
+          "download": "https://dl.polyhaven.org/file/ph-assets/Models/gltf/1k/pine_sapling_small/pine_sapling_small_1k.gltf"
+        },
+        {
+          "path": "assets/models/pine_sapling_small/textures/pine_sapling_small_twig_arm_1k.jpg",
+          "sha256": "2eb0aa44124b5a4ae9401e00b23b3c916f4c3f421616ce1bb932f248fc061288",
+          "download": "https://dl.polyhaven.org/file/ph-assets/Models/jpg/1k/pine_sapling_small/pine_sapling_small_twig_arm_1k.jpg"
+        },
+        {
+          "path": "assets/models/pine_sapling_small/textures/pine_sapling_small_twig_diff_1k.jpg",
+          "sha256": "54af7d6fb664b5a38bcb118b557bc50e01e86ec54d6f1a573c3e32c649a53362",
+          "download": "https://dl.polyhaven.org/file/ph-assets/Models/jpg/1k/pine_sapling_small/pine_sapling_small_twig_diff_1k.jpg"
+        },
+        {
+          "path": "assets/models/pine_sapling_small/textures/pine_sapling_small_bark_nor_gl_1k.jpg",
+          "sha256": "05c46455531781b6cf18cae0648cf627f60ee942adaa8bcbfd1592fc2506a9e0",
+          "download": "https://dl.polyhaven.org/file/ph-assets/Models/jpg/1k/pine_sapling_small/pine_sapling_small_bark_nor_gl_1k.jpg"
+        },
+        {
+          "path": "assets/models/pine_sapling_small/pine_sapling_small.bin",
+          "sha256": "b4d2fc73d53f1d8717eb5ef9a2c66957d2a53152787e543aace88fcd6fca94ef",
+          "download": "https://dl.polyhaven.org/file/ph-assets/Models/gltf/8k/pine_sapling_small/pine_sapling_small.bin"
+        },
+        {
+          "path": "assets/models/pine_sapling_small/textures/pine_sapling_small_bark_diff_1k.jpg",
+          "sha256": "5c76836b01c3536fa0e24207b67bf4f3315b53ebe2b4ecc6f08dfcf3f8d74929",
+          "download": "https://dl.polyhaven.org/file/ph-assets/Models/jpg/1k/pine_sapling_small/pine_sapling_small_bark_diff_1k.jpg"
+        },
+        {
+          "path": "assets/models/pine_sapling_small/textures/pine_sapling_small_bark_arm_1k.jpg",
+          "sha256": "336a4680cd571b6076b67afee2310b290b8900d9d126eb39ec1ae92e95be2ea9",
+          "download": "https://dl.polyhaven.org/file/ph-assets/Models/jpg/1k/pine_sapling_small/pine_sapling_small_bark_arm_1k.jpg"
+        },
+        {
+          "path": "assets/models/pine_sapling_small/textures/pine_sapling_small_twig_nor_gl_1k.jpg",
+          "sha256": "76af87821d7ff00e25768d5d97a449394fe64a21ae55d099da7f5ed46d9098c8",
+          "download": "https://dl.polyhaven.org/file/ph-assets/Models/jpg/1k/pine_sapling_small/pine_sapling_small_twig_nor_gl_1k.jpg"
+        }
+      ]
+    },
+    {
+      "id": "polyhaven.boulder_01",
+      "title": "Boulder 01",
+      "author": "Rico Cilliers",
+      "source": "https://polyhaven.com/a/boulder_01",
+      "license": "CC0-1.0",
+      "retrieved": "2026-11-05",
+      "modifications": "Source model/texture files unchanged; no derived runtime scenes copied.",
+      "files": [
+        {
+          "path": "assets/models/boulder_01/boulder_01_1k.gltf",
+          "sha256": "51487934db898b4c24072780a451e34eca5c02e3ada24a62bbc600bbc4019e92",
+          "download": "https://dl.polyhaven.org/file/ph-assets/Models/gltf/1k/boulder_01/boulder_01_1k.gltf"
+        },
+        {
+          "path": "assets/models/boulder_01/textures/boulder_01_arm_1k.jpg",
+          "sha256": "c57187c5746b6be913fa53846cb44ff78743e7ca5000f131c9627b99563c2b87",
+          "download": "https://dl.polyhaven.org/file/ph-assets/Models/jpg/1k/boulder_01/boulder_01_arm_1k.jpg"
+        },
+        {
+          "path": "assets/models/boulder_01/textures/boulder_01_diff_1k.jpg",
+          "sha256": "c38f0e918f6dc16b8d386ba3cdd89805c78320c119a1ceec85856f82b09a65b8",
+          "download": "https://dl.polyhaven.org/file/ph-assets/Models/jpg/1k/boulder_01/boulder_01_diff_1k.jpg"
+        },
+        {
+          "path": "assets/models/boulder_01/boulder_01.bin",
+          "sha256": "7f5b06503d62bd95bfe9c6b8a354a5cc8ff04a4d271a8cf87a3e3125db4232d7",
+          "download": "https://dl.polyhaven.org/file/ph-assets/Models/gltf/8k/boulder_01/boulder_01.bin"
+        },
+        {
+          "path": "assets/models/boulder_01/textures/boulder_01_nor_gl_1k.jpg",
+          "sha256": "0810cf6e89d89bb6eb065b4d2e2855288f5dcbd2c15c6e40ab90d462021b50aa",
+          "download": "https://dl.polyhaven.org/file/ph-assets/Models/jpg/1k/boulder_01/boulder_01_nor_gl_1k.jpg"
+        }
+      ]
+    },
+    {
+      "id": "polyhaven.forest_floor",
+      "title": "Forest Floor",
+      "author": "eye-candy.xyz",
+      "source": "https://polyhaven.com/a/forest_floor",
+      "license": "CC0-1.0",
+      "retrieved": "2026-11-05",
+      "modifications": "Source model/texture files unchanged; no derived runtime scenes copied.",
+      "files": [
+        {
+          "path": "assets/textures/forest_floor/forest_floor_diff_1k.jpg",
+          "sha256": "f12e5adea1741f9eb7a528bfc621f8267885b9530b74c3a8afdb823899bdbf0b",
+          "download": "https://dl.polyhaven.org/file/ph-assets/Textures/jpg/1k/forest_floor/forest_floor_diff_1k.jpg"
+        },
+        {
+          "path": "assets/textures/forest_floor/forest_floor_nor_gl_1k.jpg",
+          "sha256": "681f3de8c756c4d19bcda33039f953295498f38b1425ce9d56b37d6f97f6e518",
+          "download": "https://dl.polyhaven.org/file/ph-assets/Textures/jpg/1k/forest_floor/forest_floor_nor_gl_1k.jpg"
+        },
+        {
+          "path": "assets/textures/forest_floor/forest_floor_rough_1k.jpg",
+          "sha256": "ece0b331f08c03f3edcd8ab6815b74a5ae20768beef64cd4f96a5b2fa26e116e",
+          "download": "https://dl.polyhaven.org/file/ph-assets/Textures/jpg/1k/forest_floor/forest_floor_rough_1k.jpg"
+        }
+      ]
+    },
+    {
+      "id": "polyhaven.sparse_grass",
+      "title": "Sparse Grass",
+      "author": "Amal Kumar",
+      "source": "https://polyhaven.com/a/sparse_grass",
+      "license": "CC0-1.0",
+      "retrieved": "2026-11-05",
+      "modifications": "Source model/texture files unchanged; no derived runtime scenes copied.",
+      "files": [
+        {
+          "path": "assets/textures/sparse_grass/sparse_grass_diff_1k.jpg",
+          "sha256": "ae94f2b34597b9108eefd88217f55eccaec6d6b382e858a478ee92df90e66617",
+          "download": "https://dl.polyhaven.org/file/ph-assets/Textures/jpg/1k/sparse_grass/sparse_grass_diff_1k.jpg"
+        },
+        {
+          "path": "assets/textures/sparse_grass/sparse_grass_nor_gl_1k.jpg",
+          "sha256": "1c840a24807346ddaaf94a5057aee4078fcec3a4cd84bfe45da7d3b480ef460b",
+          "download": "https://dl.polyhaven.org/file/ph-assets/Textures/jpg/1k/sparse_grass/sparse_grass_nor_gl_1k.jpg"
+        },
+        {
+          "path": "assets/textures/sparse_grass/sparse_grass_rough_1k.jpg",
+          "sha256": "9ebe6d03a9551c17d1802835c92c1442acb8f5d38d4874ee8c37770f11c4bed1",
+          "download": "https://dl.polyhaven.org/file/ph-assets/Textures/jpg/1k/sparse_grass/sparse_grass_rough_1k.jpg"
+        }
+      ]
+    },
+    {
+      "id": "polyhaven.rock_path",
+      "title": "Rock Path",
+      "author": "Amal Kumar",
+      "source": "https://polyhaven.com/a/rock_path",
+      "license": "CC0-1.0",
+      "retrieved": "2026-11-05",
+      "modifications": "Source model/texture files unchanged; no derived runtime scenes copied.",
+      "files": [
+        {
+          "path": "assets/textures/rock_path/rock_path_diff_1k.jpg",
+          "sha256": "6e5e805b8a40d49f516919a256be246fea2ed46707e3f9ff124140774508180e",
+          "download": "https://dl.polyhaven.org/file/ph-assets/Textures/jpg/1k/rock_path/rock_path_diff_1k.jpg"
+        },
+        {
+          "path": "assets/textures/rock_path/rock_path_nor_gl_1k.jpg",
+          "sha256": "4a9b260df57d70b564a8f65a6584546f4bf6f439fd5863964b2226ed9d54a17c",
+          "download": "https://dl.polyhaven.org/file/ph-assets/Textures/jpg/1k/rock_path/rock_path_nor_gl_1k.jpg"
+        },
+        {
+          "path": "assets/textures/rock_path/rock_path_rough_1k.jpg",
+          "sha256": "2155182f95da50dc6c3b065f46d6435968c7932b300b1764b1e5f0267908f6ab",
+          "download": "https://dl.polyhaven.org/file/ph-assets/Textures/jpg/1k/rock_path/rock_path_rough_1k.jpg"
+        }
+      ]
+    },
+    {
+      "id": "polyhaven.rock_01",
+      "title": "Rock 01",
+      "author": "Rob Tuytel",
+      "source": "https://polyhaven.com/a/rock_01",
+      "license": "CC0-1.0",
+      "retrieved": "2026-11-05",
+      "modifications": "Source model/texture files unchanged; no derived runtime scenes copied.",
+      "files": [
+        {
+          "path": "assets/textures/rock_01/rock_01_diff_1k.jpg",
+          "sha256": "0b5f0418eb1e686190c5d33bb54c400b1f9ed58813b5e34aa5e573a5197302b5",
+          "download": "https://dl.polyhaven.org/file/ph-assets/Textures/jpg/1k/rock_01/rock_01_diff_1k.jpg"
+        },
+        {
+          "path": "assets/textures/rock_01/rock_01_nor_gl_1k.jpg",
+          "sha256": "7a7146f51159a7667233c2c14c34ff18a9f4374cc8869d53a1162648d0941023",
+          "download": "https://dl.polyhaven.org/file/ph-assets/Textures/jpg/1k/rock_01/rock_01_nor_gl_1k.jpg"
+        },
+        {
+          "path": "assets/textures/rock_01/rock_01_rough_1k.jpg",
+          "sha256": "e98b9c8ffb35513bd7b36a8730bf9745d05325376a85fae87ebf56a7c071a123",
+          "download": "https://dl.polyhaven.org/file/ph-assets/Textures/jpg/1k/rock_01/rock_01_rough_1k.jpg"
+        }
+      ]
+    },
+    {
+      "id": "polyhaven.weathered_planks",
+      "title": "Weathered Planks",
+      "author": "Dario Barresi; Dimitrios Savva",
+      "source": "https://polyhaven.com/a/weathered_planks",
+      "license": "CC0-1.0",
+      "retrieved": "2026-11-05",
+      "modifications": "Source model/texture files unchanged; no derived runtime scenes copied.",
+      "files": [
+        {
+          "path": "assets/textures/weathered_planks/weathered_planks_diff_1k.jpg",
+          "sha256": "01c9a372cfd7a7bf471b59c2458ed3ccecc93448aebf7ba0cc5b3b5b6ed24349",
+          "download": "https://dl.polyhaven.org/file/ph-assets/Textures/jpg/1k/weathered_planks/weathered_planks_diff_1k.jpg"
+        },
+        {
+          "path": "assets/textures/weathered_planks/weathered_planks_nor_gl_1k.jpg",
+          "sha256": "381d298f3194ec4961b04b4912b9b6efea4b2ff7b914dac57e24c8b6b0be6a25",
+          "download": "https://dl.polyhaven.org/file/ph-assets/Textures/jpg/1k/weathered_planks/weathered_planks_nor_gl_1k.jpg"
+        },
+        {
+          "path": "assets/textures/weathered_planks/weathered_planks_rough_1k.jpg",
+          "sha256": "a017728183597417a350d1846a5a46db9702ee6d472a21c5da2f23015d606aa3",
+          "download": "https://dl.polyhaven.org/file/ph-assets/Textures/jpg/1k/weathered_planks/weathered_planks_rough_1k.jpg"
+        }
+      ]
+    }
+  ]
+}

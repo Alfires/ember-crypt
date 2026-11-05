@@ -1,0 +1,170 @@
+{
+  "areas": {
+    "camp": [
+      0,
+      95
+    ],
+    "south_road": [
+      0,
+      70
+    ],
+    "field": [
+      0,
+      30
+    ],
+    "farm": [
+      -72,
+      65
+    ],
+    "shrine": [
+      -95,
+      22
+    ],
+    "woodland": [
+      -95,
+      -25
+    ],
+    "watchtower": [
+      -85,
+      -80
+    ],
+    "ford": [
+      30,
+      50
+    ],
+    "bridge": [
+      15,
+      -20
+    ],
+    "village": [
+      0,
+      -75
+    ],
+    "chapel": [
+      75,
+      -80
+    ],
+    "forecourt": [
+      85,
+      -30
+    ],
+    "crypt_entry": [
+      105,
+      8
+    ],
+    "galleries": [
+      105,
+      38
+    ],
+    "ossuary": [
+      80,
+      68
+    ],
+    "armory": [
+      130,
+      68
+    ],
+    "antechamber": [
+      105,
+      95
+    ],
+    "guardian": [
+      105,
+      125
+    ]
+  },
+  "routes": [
+    [
+      "camp",
+      "south_road"
+    ],
+    [
+      "south_road",
+      "field"
+    ],
+    [
+      "south_road",
+      "farm"
+    ],
+    [
+      "farm",
+      "shrine"
+    ],
+    [
+      "shrine",
+      "woodland"
+    ],
+    [
+      "woodland",
+      "watchtower"
+    ],
+    [
+      "shrine",
+      "field"
+    ],
+    [
+      "watchtower",
+      "village"
+    ],
+    [
+      "field",
+      "ford"
+    ],
+    [
+      "field",
+      "bridge"
+    ],
+    [
+      "bridge",
+      "village"
+    ],
+    [
+      "village",
+      "chapel"
+    ],
+    [
+      "chapel",
+      "forecourt"
+    ],
+    [
+      "bridge",
+      "forecourt"
+    ],
+    [
+      "forecourt",
+      "crypt_entry"
+    ],
+    [
+      "crypt_entry",
+      "galleries"
+    ],
+    [
+      "galleries",
+      "ossuary"
+    ],
+    [
+      "galleries",
+      "armory"
+    ],
+    [
+      "ossuary",
+      "antechamber"
+    ],
+    [
+      "armory",
+      "antechamber"
+    ],
+    [
+      "antechamber",
+      "guardian"
+    ]
+  ],
+  "stations": [
+    "camp",
+    "shrine",
+    "chapel",
+    "crypt_entry"
+  ],
+  "spawn": "camp",
+  "exit": "guardian"
+}
