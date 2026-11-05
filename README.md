@@ -9,9 +9,25 @@ Open `project.godot` in Godot and press F6 on `scenes/world.tscn`, or F5 to run.
 Command line: `godot --path /path/to/ember-crypt`.
 
 WASD moves, Shift runs, mouse looks, E opens a nearby station, Esc releases the
-mouse/closes a panel. Four working map/information panels sit at camp, shrine,
+mouse/closes a panel. Four working progression/map panels sit at camp, shrine,
 chapel and crypt entry; the Credits lectern immediately beside camp spawn shows
 the actual asset creators. Panels stop preview movement and work offline.
+
+Discover landmarks to earn **25 one-time exploration XP** each. Every 100 run XP
+grants a choice of damage, cooldown or health upgrade. All four stations share ten
+menu pages: Overview, Stats, Upgrades, Level up, Build, Milestones, Cosmetics, XP,
+Map and Save data. Opening menus awards no XP. These are exploration rewards,
+not pretend combat victories; enemy rewards will come with actual combat.
+
+Lifetime XP, discoveries and amber/teal cosmetic selection persist in
+`user://ember-crypt-progress.json`. The selected cosmetic is a saved preference;
+spell visuals are not implemented. Camp offers a new exploration run and a
+two-step confirmed progression reset. New runs clear temporary upgrades, not
+discoveries: revisiting landmarks cannot farm lifetime XP. Consequently this first
+exploration track is finite, not yet the repeatable combat leveling loop.
+Malformed, oversized and future-version saves are preserved with temporary play
+and an explicit error; write failures remain visibly unsaved and can be retried.
+The standalone save is not account-scoped or the Comunicare storage API.
 
 ## Built map
 
@@ -52,8 +68,10 @@ python3 tests/run.py
 ```
 
 Uses an isolated project/HOME/XDG copy under `/tmp/opencode`, imports assets,
-runs real Godot collision queries, then smoke-runs the desktop preview. Set
-`GODOT=/path/to/godot` if necessary. Initial result: **320 assertions, zero failures**;
+runs real Godot collision queries, progression/storage rules, actual station button
+actions and the desktop preview smoke test. Set
+`GODOT=/path/to/godot` if necessary. Current result: **320 map + 41 progression +
+56 menu assertions, zero failures**;
 **28 asset-file SHA-256 hashes verified**. Return codes: 0 pass, 1 assertion failure,
 2 infrastructure/engine errors. No real account, relay, microphone or XR is used.
 Route tests check centerline obstructions and sampled ground, not full capsule
@@ -81,10 +99,12 @@ blade vegetation or sculpted terrain. Trees/rocks are decorative without individ
 collision. Labels are authoring wayfinding rather than final in-world signage.
 
 The crypt is currently roofed at surface level, not excavated below terrain.
-Enemy AI/combat, guardian, objective gates, seeded encounters, XP, healing,
-level-up choices, persistent progression, animations, shortcuts, VR interaction
-and safe package conversion are **not implemented**. Station pages explicitly say
-so; no fake stat/XP controls are presented. No 20–30 minute gameplay claim.
+Enemy AI/combat, guardian, objective gates, seeded encounters, healing, combat XP,
+animations, shortcuts, VR interaction and safe package conversion are **not
+implemented**. Exploration XP, local progression and run upgrade selection now
+work; calculated damage/cooldown/health stats do not yet affect combat. No
+20–30 minute gameplay claim. Menus have headless behavioral tests, but rendered
+layout/accessibility and physical headset input remain manual gates.
 
 The author-side desktop preview uses trusted local GDScript. Do **not** upload this
 repository as a playable safe ZIP, disable validators or execute these scripts in
@@ -92,5 +112,5 @@ downloaded worlds. Package publication needs conversion to the supported reviewe
 world APIs. Neither headless checks nor the Compatibility renderer validate final
 Forward Plus visuals, headset performance or comfort. Rendered art review remains open.
 
-Git repository is local with no remote configured. Set a chosen remote explicitly
-before publishing. Do not add caches, user saves or credentials.
+Remote: https://github.com/Alfires/ember-crypt (`main` tracks `origin/main`).
+Do not add caches, user saves or credentials.

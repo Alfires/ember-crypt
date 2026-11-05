@@ -28,7 +28,7 @@ def main():
             path = Path(folder) / key
             path.mkdir()
             env[key] = str(path)
-        for args in (["--editor", "--import"], ["--script", "res://tests/map_suite.gd"], ["--quit-after", "5"]):
+        for args in (["--editor", "--import"], ["--script", "res://tests/map_suite.gd"], ["--script", "res://tests/progression_suite.gd"], ["--script", "res://tests/menu_suite.gd"], ["--quit-after", "5"]):
             result = subprocess.run([os.environ.get("GODOT", "godot"), "--headless", "--path", str(project), *args], env=env, capture_output=True, text=True, timeout=180)
             output = result.stdout + result.stderr
             if "--editor" not in args or result.returncode or "ERROR:" in output:
