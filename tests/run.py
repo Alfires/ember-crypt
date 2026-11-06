@@ -24,7 +24,9 @@ def main():
                 raise ValueError(f"Asset hash mismatch: {item['path']}")
             count += 1
     print(f"Asset provenance: {count} hashes verified")
-    with tempfile.TemporaryDirectory(prefix="ember-map-", dir="/tmp/opencode") as folder:
+    temporary_root = ROOT / "build/test-tmp"
+    temporary_root.mkdir(parents=True, exist_ok=True)
+    with tempfile.TemporaryDirectory(prefix="ember-map-", dir=temporary_root) as folder:
         project = Path(folder) / "project"
         shutil.copytree(ROOT, project, ignore=shutil.ignore_patterns(".git", ".godot", "*.import", "__pycache__", "build"))
         env = os.environ.copy()

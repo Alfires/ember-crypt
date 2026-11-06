@@ -33,6 +33,24 @@ EDGES = [
 STATIONS = ["camp", "shrine", "chapel", "crypt_entry"]
 
 
+def distance_to_routes(x, z):
+    best = math.inf
+    for a, b in EDGES:
+        ax, az = AREAS[a]
+        bx, bz = AREAS[b]
+        vx, vz = bx-ax, bz-az
+        t = max(0, min(1, ((x-ax)*vx+(z-az)*vz)/(vx*vx+vz*vz)))
+        best = min(best, math.hypot(x-ax-t*vx, z-az-t*vz))
+    return best
+
+
+def safe_offset(ax, az, preferred):
+    for dx, dz in [preferred, (6,-6), (-6,-6), (-6,6), (8,3), (-8,3)]:
+        if distance_to_routes(ax+dx, az+dz) >= 2.5:
+            return ax+dx, az+dz
+    raise ValueError("No safe prop location near landmark")
+
+
 class Scene:
     def __init__(self):
         self.resources = []
@@ -155,7 +173,7 @@ def build():
             for step in range(steps + 1):
                 px = ax + (bx-ax)*step/steps
                 pz = az + (bz-az)*step/steps
-                if abs(px-x) < size[0]/2+1 and abs(pz-z) < size[2]/2+1:
+                if abs(px-x) < size[0]/2+1.6 and abs(pz-z) < size[2]/2+1.6:
                     return
         s.box(name, xyz, size, material or stone)
         return True
@@ -188,12 +206,57 @@ def build():
         x, z = AREAS[name]
         ruin(name, x, z, 21, 22, 5, True)
         s.node(name + "Lamp", "OmniLight3D", properties=f"position = Vector3({x}, 3, {z})\nlight_color = Color(1, 0.57, 0.24, 1)\nlight_energy = 4\nomni_range = 19")
+    # Distinct original architecture assembled from audited stone/wood surfaces.
+    # Details are placed on existing wall lines; route-clearance checks decide
+    # which bays can safely contain structural projections.
+    for name in ("farm", "village", "chapel", "watchtower", "crypt_entry", "galleries", "ossuary", "armory", "antechamber", "guardian"):
+        x, z = AREAS[name]
+        crypt = name in ("crypt_entry", "galleries", "ossuary", "armory", "antechamber", "guardian")
+        width, depth = (21, 22) if crypt else (18, 16)
+        height = 8 if name == "watchtower" else 5 if crypt else 4
+        # Stone plinths and horizontal courses vary the masonry at player height.
+        for side in (-1, 1):
+            for offset in (-depth/3, 0, depth/3):
+                for level in (0.3, 1.4, 2.7):
+                    clear_wall("MasonryCourse", (x+side*width/2, level, z+offset), (0.82, 0.13, depth/3-0.15))
+            if name in ("chapel", "crypt_entry", "guardian"):
+                for offset in (-depth/2+2, depth/2-2):
+                    clear_wall("Buttress", (x+side*(width/2+0.6), height/2, z+offset), (1.25, height, 1.3))
+                    clear_wall("ButtressCap", (x+side*(width/2+0.6), height+0.1, z+offset), (1.45, 0.25, 1.55))
+        # Heavy doorway frames read as entrances even when adjacent wall bays
+        # are opened for diagonal routes. No trim crosses the walking opening.
+        for side in (-1, 1):
+            for dx in (-width/6-0.4, width/6+0.4):
+                clear_wall("DoorJamb", (x+dx, 1.65, z+side*depth/2), (0.8, 3.3, 1.0))
+            s.box("DoorCornice", (x, height+0.05, z+side*depth/2), (width/3+1.6, 0.25, 1.1), stone)
+        if name in ("farm", "village", "chapel"):
+            # Pitched timber framing and roof boards, not a solid block roof.
+            for offset in (-depth/2, 0, depth/2):
+                for side in (-1, 1):
+                    parent = f"RoofFrame_{name}_{offset}_{side}".replace(".", "_")
+                    s.node(parent, "Node3D", properties=f"position = Vector3({x+side*width/4}, {height+1.6}, {z+offset})\nrotation = Vector3(0, 0, {side*-0.34})")
+                    s.box("RoofBeam", (0,0,0), (width/2+0.8, 0.24, 0.28), wood, False, parent)
+            for side in (-1, 1):
+                parent = f"RoofSlope_{name}_{side}"
+                s.node(parent, "Node3D", properties=f"position = Vector3({x+side*width/4}, {height+1.6}, {z})\nrotation = Vector3(0, 0, {side*-0.34})")
+                # Village/farm leave damaged gaps; chapel retains more shelter.
+                for plank in range(9):
+                    if name != "chapel" and plank in (2, 6): continue
+                    s.box("RoofBoard", (0,0.13,-depth/2+plank*depth/8), (width/2+0.8, 0.14, depth/9), wood, False, parent)
+        if crypt:
+            # Ribbed ceilings and corner piers distinguish the interior wing.
+            for offset in (-7, 0, 7):
+                s.box("VaultRib", (x, 4.65, z+offset), (19.6, 0.25, 0.45), stone, False)
+            for side in (-1, 1):
+                for offset in (-7, 7):
+                    clear_wall("CryptPier", (x+side*9.3, 2.2, z+offset), (0.8, 4.4, 0.9))
     # Four stations + adjacent spawn credits, all real preview interactions.
     for name in STATIONS + ["credits"]:
         x, z = AREAS["camp" if name == "credits" else name]
         x += -4 if name == "credits" else 4
         if name not in ("camp", "credits"):
-            z += 6
+            ax, az = AREAS[name]
+            x, z = safe_offset(ax, az, (4,6))
         s.node("Station_" + name, "Node3D", properties=f'position = Vector3({x}, 0, {z})\nmetadata/title = "{name.replace("_", " ").title()} — {"Credits" if name == "credits" else "Leveling & map"}"\nmetadata/kind = "{"credits" if name == "credits" else "leveling"}"', groups=["stations"])
         s.box("Lectern", (x, 0.65, z), (1.1, 1.3, 0.8), stone)
         s.box("Book", (x, 1.34, z), (0.9, 0.08, 0.65), gold, False)
@@ -215,7 +278,8 @@ def build():
     for index, area in enumerate(("camp", "farm", "shrine", "watchtower", "village", "chapel", "forecourt", "crypt_entry", "galleries", "ossuary", "armory", "guardian")):
         ax, az = AREAS[area]
         name = f"Supply_{index:02d}"
-        s.node(name, "RigidBody3D", properties=f'position = Vector3({ax + 6}, 1.5, {az + 6})\nmass = 0.5\nmetadata/world_entity_id = "supply_{index:02d}"\nmetadata/world_pickup = true', groups=["world_items"])
+        px, pz = safe_offset(ax, az, (6,6))
+        s.node(name, "RigidBody3D", properties=f'position = Vector3({px}, 1.5, {pz})\nmass = 0.5\nmetadata/world_entity_id = "supply_{index:02d}"\nmetadata/world_pickup = true', groups=["world_items"])
         s.box("SupplyCase", (0, 0, 0), (0.45, 0.35, 0.35), wood, False, name)
         shape = s.resource("BoxShape3D", "size = Vector3(0.45, 0.35, 0.35)")
         s.node("Collision", "CollisionShape3D", name, f"shape = {shape}")

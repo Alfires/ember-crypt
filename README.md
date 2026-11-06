@@ -37,9 +37,13 @@ quality, foliage transparency and mesh-chunk draw-call cost need rendered review
 The production-loader fixture copies the chosen Comunicare world services into a
 disposable project with isolated HOME/XDG data. It checks the actual archive,
 client menu button actions, shared state, storage reopening and script stop cleanup.
-Current result: **2,318 checks pass** (mostly per-node no-script checks), not 2,318
+Current result: **3,085 checks pass** (mostly per-node no-script checks), not 3,085
 independent gameplay scenarios. Includes exported route clearance, twelve rigid
 pickup bodies and settling physics, foliage cutout settings and geometry sharing.
+All 29 routes also undergo a swept 0.35 m-radius, 1.8 m-high capsule check. This
+found a shrine lectern and supply case encroaching on routes; deterministic
+route-aware prop placement now keeps them clear. Capsule sweeps use a lifted
+horizontal segment; they are not a complete walking/step-climbing simulation.
 It is not a full application/headset test: actual
 player input targeting, DataLoader transitions and client UI navigation remain
 manual/integration gates. No relay, real account, microphone or headset is started.
@@ -102,6 +106,10 @@ The standalone save is not account-scoped or the Comunicare storage API.
   still required; isolated tests verify export structure and real settling physics.
 - Farm/village ruins, woodland/watchtower, chapel refuge and a roofed crypt wing
   with galleries, ossuary, armory, antechamber and guardian hall.
+- Landmarks now include original timber roof framing, damaged plank roofs,
+  masonry courses, doorway trim, chapel/crypt buttresses and interior ceiling ribs.
+  Route-clearance checks omit details that would block travel. These are authored
+  architectural improvements, not an imported finished environment pack.
 - Original composition using detailed CC0 scanned Poly Haven trees/boulders and
   PBR surface textures, not a low-poly purchased environment/demo pack.
 - Ordinary editable static TSCN geometry/collision: no map-generation script runs
@@ -134,15 +142,16 @@ area/route graph; this diagram is schematic.
 python3 tests/run.py
 ```
 
-Uses an isolated project/HOME/XDG copy under `/tmp/opencode`, imports assets,
+Uses an isolated project/HOME/XDG copy under ignored `build/test-tmp/`, imports assets,
 runs real Godot collision queries, progression/storage rules, actual station button
 actions and the desktop preview smoke test. Set
-`GODOT=/path/to/godot` if necessary. Current result: **426 map + 41 progression +
+`GODOT=/path/to/godot` if necessary. Current result: **429 map + 41 progression +
 56 menu assertions and five Python landscape tests, zero failures**;
 **28 asset-file SHA-256 hashes verified**. Return codes: 0 pass, 1 assertion failure,
 2 infrastructure/engine errors. No real account, relay, microphone or XR is used.
-Route tests check centerline obstructions and sampled ground, not full capsule
-clearance, navigation-agent behavior or accessibility at all possible positions.
+Author-map tests check centerline obstructions and sampled ground; the separate
+package suite additionally sweeps player-width capsules. Neither verifies actual
+navigation agents, step climbing or accessibility at all possible positions.
 
 Regenerate: `python3 tools/build_map.py`. Selected source assets were imported
 from the existing local Comunicare asset inventory using:
@@ -163,6 +172,8 @@ For real rendered package review (requires an available graphical display):
 
 ```sh
 python3 tests/run_package.py --comunicare /path/to/comunicare --render
+# Smaller review run:
+python3 tests/run_package.py --comunicare /path/to/comunicare --render --view chapel
 ```
 
 Captures grass close-up, camp, field, woodland and overview under `build/review/` using the actual
@@ -170,8 +181,15 @@ safe loader. A Compatibility/Intel UHD 630 capture completed; the graphics stack
 also printed NVIDIA driver-selection warnings. This is not a performance or
 headset certification. A denser experimental foliage configuration timed out and
 was replaced with the lower-geometry tested configuration. The current grass export uses
-146 meshes, 117,177 vertices and 246,252 indices; repeated instances
+158 meshes, 117,465 vertices and 246,684 indices; repeated instances
 still incur rendering cost. No final-quality art approval is implied by screenshots.
+Latest architecture pass: 3,085 package checks pass after route-safe prop placement.
+An earlier package-test attempt and a full rendered capture timed out; individual
+chapel and crypt-interior capture runs subsequently completed. Chapel review still
+shows simple walls, flat surrounding ground and sparse tree silhouettes: capture
+completion is not final art approval. Graphics driver-selection warnings persist.
+Temporary projects now use ignored `build/test-tmp/` because shared `/tmp` filled;
+no unrelated temporary files were removed. This also applies to package export.
 
 This is a first map implementation, **not final high-quality art sign-off**.
 The detailed scanned nature assets/PBR materials are present, but buildings are

@@ -59,7 +59,7 @@ func run():
 	check(pickups.size() == 12, "all twelve supply items survive safe package export")
 	for frame in 90: await physics_frame
 	for item in pickups:
-		check(item.global_position.y > -0.2 and item.global_position.y < 1, "exported item falls onto actual floor without sinking")
+		check(item.global_position.y > -0.2 and item.global_position.y < 1.6 and absf(item.linear_velocity.y) < 0.1, "exported item settles on floor or furniture without sinking")
 	var archive = ZIPReader.new()
 	archive.open("res://ember-crypt.cworld")
 	var map = JSON.parse_string(archive.read_file("map.json").get_string_from_utf8())
@@ -76,6 +76,21 @@ func run():
 		var start = Vector3(a[0], 1, a[1])
 		var finish = Vector3(b[0], 1, b[1])
 		check(physics.intersect_ray(PhysicsRayQueryParameters3D.create(start, finish)).is_empty(), "exported route clear: " + str(edge))
+		# Sweep a human-sized capsule along the route, not just a zero-width ray.
+		var capsule = CapsuleShape3D.new()
+		capsule.radius = 0.35
+		capsule.height = 1.8
+		var query = PhysicsShapeQueryParameters3D.new()
+		query.shape = capsule
+		query.transform = Transform3D(Basis.IDENTITY, start + Vector3(0, 0.4, 0))
+		query.motion = finish-start
+		var sweep = physics.cast_motion(query)
+		if sweep[0] < 0.999:
+			query.transform.origin += query.motion * minf(1, sweep[1]+0.001)
+			query.motion = Vector3.ZERO
+			for collision in physics.intersect_shape(query):
+				print("Route obstacle: ", edge, " / ", collision.collider.name, " at ", collision.collider.global_position)
+		check(sweep[0] >= 0.999, "player capsule can traverse route: " + str(edge))
 	var runtime = load("res://scripts/worlds/world_runtime.gd").new()
 	world.add_child(runtime)
 	check(runtime.configure(world, result.document).ok, "configure production world runtime")

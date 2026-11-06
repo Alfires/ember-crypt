@@ -20,7 +20,7 @@ def button(id, text, page):
 def world_logic(destination):
     manifest = {
         "format": "comunicare.world", "schema_version": 1,
-        "world_id": "ember-crypt-ashen-vale", "release": "0.3.2",
+        "world_id": "ember-crypt-ashen-vale", "release": "0.3.3",
         "title": "Ember Crypt — Ashen Vale", "main_scene": "scenes/world.tscn",
         "requires": {"world_api": 1, "script_api": 1},
         "script_capabilities": ["ui.local", "state.local", "storage.local", "interaction.events"],
@@ -75,7 +75,9 @@ def chunks(text, maximum):
 
 
 def build(output):
-    with tempfile.TemporaryDirectory(prefix="ember-export-", dir="/tmp/opencode") as folder:
+    temporary_root = ROOT / "build/test-tmp"
+    temporary_root.mkdir(parents=True, exist_ok=True)
+    with tempfile.TemporaryDirectory(prefix="ember-export-", dir=temporary_root) as folder:
         folder = Path(folder)
         project = folder / "author"
         shutil.copytree(ROOT, project, ignore=shutil.ignore_patterns(".git", ".godot", "*.import", "__pycache__", "build"))

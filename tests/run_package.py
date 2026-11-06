@@ -16,12 +16,15 @@ def main():
     parser.add_argument("--comunicare", type=Path, required=True)
     parser.add_argument("--package", type=Path, default=ROOT / "build/ember-crypt.cworld")
     parser.add_argument("--render", action="store_true", help="Also capture real package views using the available display")
+    parser.add_argument("--view", choices=["chapel", "crypt_interior", "grass_detail", "camp", "field", "woodland", "overview"], help="Capture only this view (requires --render)")
     args = parser.parse_args()
     with zipfile.ZipFile(args.package) as archive:
         forbidden = [name for name in archive.namelist() if name.endswith((".gd", ".gltf", ".glb", ".bin", ".jpg", ".import")) or name in ("project.godot",)]
         if forbidden:
             raise ValueError(f"Unsafe/unconverted package files: {forbidden}")
-    with tempfile.TemporaryDirectory(prefix="ember-client-", dir="/tmp/opencode") as folder:
+    temporary_root = ROOT / "build/test-tmp"
+    temporary_root.mkdir(parents=True, exist_ok=True)
+    with tempfile.TemporaryDirectory(prefix="ember-client-", dir=temporary_root) as folder:
         folder = Path(folder)
         project = folder / "project"
         project.mkdir()
@@ -49,7 +52,9 @@ def main():
         if args.render:
             target = ROOT / "build/review"
             target.mkdir(parents=True, exist_ok=True)
-            result = subprocess.run([os.environ.get("GODOT", "godot"), "--path", str(project), "--script", "res://render.gd", "--", str(target)], env=env, capture_output=True, text=True, timeout=180)
+            command = [os.environ.get("GODOT", "godot"), "--path", str(project), "--script", "res://render.gd", "--", str(target)]
+            if args.view: command.append(args.view)
+            result = subprocess.run(command, env=env, capture_output=True, text=True, timeout=180)
             output = result.stdout + result.stderr
             print(output)
             if "ERROR:" in output or result.returncode: return 2

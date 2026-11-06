@@ -15,6 +15,8 @@ func run():
 	camera.far = 800
 	world.add_child(camera)
 	var shots = [
+		["chapel", Vector3(54, 8, -56), Vector3(75, 3, -80)],
+		["crypt_interior", Vector3(105, 2, 34), Vector3(105, 3, 43)],
 		["grass_detail", Vector3(-23, 1.7, 57), Vector3(-13, 0.3, 43)],
 		["camp", Vector3(-12, 8, 110), Vector3(0, 1, 80)],
 		["field", Vector3(35, 14, 65), Vector3(-15, 1, -20)],
@@ -22,6 +24,8 @@ func run():
 		["overview", Vector3(220, 260, 260), Vector3(0, 0, 10)],
 	]
 	for shot in shots:
+		var args = OS.get_cmdline_user_args()
+		if args.size() > 1 and shot[0] != args[1]: continue
 		camera.position = shot[1]
 		camera.look_at(shot[2])
 		for frame in 8: await process_frame
