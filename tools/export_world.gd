@@ -135,11 +135,48 @@ func transform_text(value: Transform3D) -> String:
 	var o = value.origin
 	return "Transform3D(%s, %s, %s, %s, %s, %s, %s, %s, %s, %s, %s, %s)" % [b.x.x,b.x.y,b.x.z,b.y.x,b.y.y,b.y.z,b.z.x,b.z.y,b.z.z,o.x,o.y,o.z]
 
+func nature_collision(node: Node3D, transform: Transform3D):
+	var bounds = AABB()
+	var found = false
+	for mesh_node in node.find_children("*", "MeshInstance3D", true, false):
+		var local = Transform3D.IDENTITY
+		var ancestor = mesh_node
+		while ancestor != node:
+			local = ancestor.transform * local
+			ancestor = ancestor.get_parent()
+		var tree = str(node.name).begins_with("Pine_")
+		if tree and str(mesh_node.name) != "pine_sapling_small_a": continue
+		# Trunk surface only: foliage must never form an invisible canopy wall.
+		var box = AABB()
+		if tree:
+			var vertices = mesh_node.mesh.surface_get_arrays(0)[Mesh.ARRAY_VERTEX]
+			box = AABB(vertices[0], Vector3.ZERO)
+			for vertex in vertices: box = box.expand(vertex)
+		else:
+			box = mesh_node.mesh.get_aabb()
+		box = transform * local * box
+		bounds = bounds.merge(box) if found else box
+		found = true
+	if not found: return
+	var size = bounds.size
+	# Axis-aligned conservative primitive approximation, not triangle collision.
+	size.x = maxf(size.x, 0.12)
+	size.y = maxf(size.y, 0.12)
+	size.z = maxf(size.z, 0.12)
+	var id = "nature_shape" + str(nodes.size())
+	resources.append('[sub_resource type="BoxShape3D" id="%s"]\nsize = Vector3(%s, %s, %s)' % [id, size.x,size.y,size.z])
+	var name = "NatureCollision" + str(nodes.size())
+	var center = bounds.get_center()
+	nodes.append('[node name="%s" type="StaticBody3D" parent="."]\nposition = Vector3(%s, %s, %s)' % [name,center.x,center.y,center.z])
+	nodes.append('[node name="Shape" type="CollisionShape3D" parent="%s"]\nshape = SubResource("%s")' % [name,id])
+
 func visit(node: Node, transform: Transform3D = Transform3D.IDENTITY, body_parent: String = "", body_transform: Transform3D = Transform3D.IDENTITY):
 	# The publisher scene is a three-variant catalogue, not one tree. Use a single
 	# tree per placement and spend geometry on needles instead of three trunks.
 	if str(node.name) in ["pine_sapling_small_b", "pine_sapling_small_c"]: return
 	if node is Node3D: transform = transform * node.transform
+	if str(node.name).begins_with("Pine_") or str(node.name).begins_with("Rock_"):
+		nature_collision(node, transform)
 	if node is RigidBody3D and node.get_meta("world_pickup", false):
 		var id = str(node.get_meta("world_entity_id"))
 		body_parent = str(node.name)

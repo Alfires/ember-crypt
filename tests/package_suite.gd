@@ -67,6 +67,22 @@ func run():
 	check(int(map.size_m[0]) == 440 and int(map.size_m[1]) == 370 and map.trees >= 100 and map.rocks >= 65, "expanded scenery counts recorded in actual package")
 	check(map.grass_blades > 12000 and map.grass_patches == grass_surfaces, "grass density metadata matches real package geometry")
 	var physics = world.get_world_3d().direct_space_state
+	var nature_bodies = world.find_children("NatureCollision*", "StaticBody3D", false, false)
+	check(nature_bodies.size() == 190, "115 tree trunks and 75 rocks have physical collision")
+	for obstacle in nature_bodies:
+		var shape_node = obstacle.get_node("Shape")
+		var point = obstacle.global_position
+		var half_height = shape_node.shape.size.y / 2
+		var ray = PhysicsRayQueryParameters3D.create(point + Vector3(0, half_height+1, 0), point - Vector3(0, half_height+1, 0))
+		# Neighboring rock/trunk bounds can overlap; isolate the queried obstacle
+		# rather than mistaking an earlier neighboring hit for absent collision.
+		var exclusions: Array[RID] = []
+		for other in nature_bodies:
+			if other != obstacle: exclusions.append(other.get_rid())
+		ray.exclude = exclusions
+		var hit = physics.intersect_ray(ray)
+		check(not hit.is_empty() and hit.collider == obstacle, "natural obstacle participates in physics queries")
+		check(shape_node.shape is BoxShape3D and shape_node.shape.size.x > 0 and shape_node.shape.size.z > 0, "natural collider has finite positive dimensions")
 	for center in [Vector2(-35,48), Vector2(48,65), Vector2(-55,-12)]:
 		var hit = physics.intersect_ray(PhysicsRayQueryParameters3D.create(Vector3(center.x, 2, center.y), Vector3(center.x, -1, center.y)))
 		check(not hit.is_empty() and hit.position.y > 0.4, "earth bank collision survives safe export")

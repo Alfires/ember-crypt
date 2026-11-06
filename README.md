@@ -37,7 +37,7 @@ quality, foliage transparency and mesh-chunk draw-call cost need rendered review
 The production-loader fixture copies the chosen Comunicare world services into a
 disposable project with isolated HOME/XDG data. It checks the actual archive,
 client menu button actions, shared state, storage reopening and script stop cleanup.
-Current result: **3,085 checks pass** (mostly per-node no-script checks), not 3,085
+Current result: **3,846 checks pass** (mostly per-node no-script checks), not 3,846
 independent gameplay scenarios. Includes exported route clearance, twelve rigid
 pickup bodies and settling physics, foliage cutout settings and geometry sharing.
 All 29 routes also undergo a swept 0.35 m-radius, 1.8 m-high capsule check. This
@@ -89,6 +89,11 @@ The standalone save is not account-scoped or the Comunicare storage API.
 - **115 tree placements and 75 scanned rock clusters**, rounded horizon foothills,
   camp/ruin tables, benches and route-safe supply crates. Safe export selects one
   scanned tree variant per placement rather than importing the full catalogue.
+  Safe export now adds 190 static collision bodies, derived from the selected
+  tree's trunk surface and each rock's visual bounds. Foliage does not collide.
+  These are axis-aligned primitive approximations, not exact mesh collision;
+  irregular rock contours may have conservative blocking margins. The production
+  package suite ray-tests each body and rechecks all 29 capsule route sweeps.
 - **18,470 bent grass blades in 55 irregular static patches**, with varied height,
   lean and orientation. Placement excludes route verges, buildings, water and
   interaction clearings. Original generated geometry is under `assets/vegetation/`
@@ -183,7 +188,7 @@ headset certification. A denser experimental foliage configuration timed out and
 was replaced with the lower-geometry tested configuration. The current grass export uses
 158 meshes, 117,465 vertices and 246,684 indices; repeated instances
 still incur rendering cost. No final-quality art approval is implied by screenshots.
-Latest architecture pass: 3,085 package checks pass after route-safe prop placement.
+Latest nature-collision pass: 3,846 package checks pass after route-safe prop placement.
 An earlier package-test attempt and a full rendered capture timed out; individual
 chapel and crypt-interior capture runs subsequently completed. Chapel review still
 shows simple walls, flat surrounding ground and sparse tree silhouettes: capture
@@ -194,8 +199,9 @@ no unrelated temporary files were removed. This also applies to package export.
 This is a first map implementation, **not final high-quality art sign-off**.
 The detailed scanned nature assets/PBR materials are present, but buildings are
 original modular masonry shells; the meadow now has blade patches but still needs
-more convincing ground variation and sculpted terrain. Trees/rocks are decorative without individual
-collision. Labels are authoring wayfinding rather than final in-world signage.
+more convincing ground variation and sculpted terrain. Trees/rocks now have
+primitive collision in the safe export; author preview collision is not yet
+equivalent. Labels are authoring wayfinding rather than final in-world signage.
 
 The crypt is currently roofed at surface level, not excavated below terrain.
 Enemy AI/combat, guardian, objective gates, seeded encounters, healing, combat XP,

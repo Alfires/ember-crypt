@@ -20,7 +20,7 @@ def button(id, text, page):
 def world_logic(destination):
     manifest = {
         "format": "comunicare.world", "schema_version": 1,
-        "world_id": "ember-crypt-ashen-vale", "release": "0.3.3",
+        "world_id": "ember-crypt-ashen-vale", "release": "0.3.4",
         "title": "Ember Crypt — Ashen Vale", "main_scene": "scenes/world.tscn",
         "requires": {"world_api": 1, "script_api": 1},
         "script_capabilities": ["ui.local", "state.local", "storage.local", "interaction.events"],
