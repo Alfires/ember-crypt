@@ -210,8 +210,8 @@ func visit(node: Node, transform: Transform3D = Transform3D.IDENTITY, body_paren
 		nodes.append('[node name="Light%s" type="%s" parent="."]\ntransform = %s\nlight_color = Color(%s, %s, %s, 1)\nlight_energy = %s%s' % [nodes.size(), node.get_class(), transform_text(transform), color.r,color.g,color.b,node.light_energy,extra])
 	elif node is Marker3D and node.get_meta("world_spawn", false):
 		nodes.append('[node name="Spawn" type="Marker3D" parent="."]\ntransform = %s\nmetadata/world_entity_id = "spawn"\nmetadata/world_spawn = true' % transform_text(transform))
-	elif node.name.begins_with("Station_"):
-		var id = str(node.name).trim_prefix("Station_")
+	elif node.name.begins_with("Station_") or node.name.begins_with("Objective_"):
+		var id = str(node.name).trim_prefix("Station_").trim_prefix("Objective_")
 		nodes.append('[node name="%s" type="Node3D" parent="."]\ntransform = %s\nmetadata/world_entity_id = "%s"\nmetadata/world_script = "logic/%s.worldscript"' % [node.name, transform_text(transform), id, id])
 	for child in node.get_children(): visit(child, transform, body_parent, body_transform)
 

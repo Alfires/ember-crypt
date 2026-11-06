@@ -45,6 +45,13 @@ func run():
 	check(world.find_children("RoofBeam*", "MeshInstance3D", true, false).size() >= 12, "landmarks have timber roof framing")
 	check(world.find_children("MasonryCourse*", "MeshInstance3D", false, false).size() >= 30, "masonry shells have visible courses")
 	check(world.find_children("Buttress*", "MeshInstance3D", false, false).size() >= 8, "chapel and crypt have distinct structural silhouettes")
+	for objective_id in ["relic_watchtower", "relic_village", "relic_forecourt", "altar"]:
+		var objective = world.get_node_or_null("Objective_" + objective_id)
+		check(objective is Node3D, "objective has physical interaction marker: " + objective_id)
+		if objective == null: continue
+		check(objective.get_meta("world_entity_id", "") == objective_id, "objective entity identity is stable")
+		check(objective.get_meta("world_script", "") == "logic/" + objective_id + ".worldscript", "objective binds its own restricted program")
+		check(objective.position.y > 0.5 and objective.position.y < 1.5, "objective target at reachable interaction height")
 	var physics = world.get_world_3d().direct_space_state
 	for center in [Vector2(-35,48), Vector2(48,65), Vector2(-55,-12)]:
 		var hit = physics.intersect_ray(PhysicsRayQueryParameters3D.create(Vector3(center.x, 2, center.y), Vector3(center.x, -1, center.y)))

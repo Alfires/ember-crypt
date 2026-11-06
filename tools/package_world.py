@@ -20,7 +20,7 @@ def button(id, text, page):
 def world_logic(destination):
     manifest = {
         "format": "comunicare.world", "schema_version": 1,
-        "world_id": "ember-crypt-ashen-vale", "release": "0.3.4",
+        "world_id": "ember-crypt-ashen-vale", "release": "0.4.0",
         "title": "Ember Crypt — Ashen Vale", "main_scene": "scenes/world.tscn",
         "requires": {"world_api": 1, "script_api": 1},
         "script_capabilities": ["ui.local", "state.local", "storage.local", "interaction.events"],
@@ -44,6 +44,8 @@ def world_logic(destination):
         {"id": "saved_note", "type": "text", "bind": "saved.map_note"},
         {"id": "remember", "type": "button", "text": "Save map note on this PC", "entity": "camp", "actions": [{"op": "save_set", "key": "map_note", "value": "Ashen Vale routes reviewed"}]},
     ]
+    from objective_loop import add_loop
+    programs = add_loop(pages)
     credits = json.loads((ROOT / "assets/provenance.json").read_text())
     pages["credits"] = {"title": "Asset creator Credits", "widgets": [
         {"id": "credit" + str(index), "type": "text", "text": f"{asset['title']}\nCreator: {asset['author']}\n{asset['license']}\n{asset['source']}"}
@@ -53,7 +55,7 @@ def world_logic(destination):
     pages["license"] = {"title": "CC0 license", "widgets": [{"id": "terms" + str(index), "type": "text", "text": chunk} for index, chunk in enumerate(chunks((ROOT / "assets/licenses/CC0-1.0.txt").read_text(), 1800))]}
     for key, page in pages.items():
         if key == "overview":
-            destinations = [name for name in pages if name != "overview"]
+            destinations = [name for name in pages if name not in ("overview", "victory", "locked")]
         else:
             destinations = ["overview"]
         for target in destinations:
@@ -66,6 +68,8 @@ def world_logic(destination):
     write("ui/menu.worldui", {"version": 1, "pages": pages})
     for station in ("camp", "shrine", "chapel", "crypt_entry", "credits"):
         write(f"logic/{station}.worldscript", {"version": 1, "events": {"use": [{"op": "menu", "page": "credits" if station == "credits" else "overview"}]}})
+    for entity, operations in programs.items():
+        write(f"logic/{entity}.worldscript", {"version": 1, "events": {"use": operations}})
     write("attribution.json", credits)
     write("map.json", json.loads((ROOT / "map.json").read_text()))
 

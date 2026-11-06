@@ -275,6 +275,14 @@ def build():
         clear_wall("Bench", (ax + 6, 0.5, az - 5.5), (2.5, 0.3, 0.55), wood)
     # Tangible world objects, not menu rewards. Existing client item transport
     # owns desktop/VR carrying; no custom physics scripts are packaged.
+    for area in ("watchtower", "village", "forecourt", "guardian"):
+        ax, az = AREAS[area]
+        px, pz = safe_offset(ax, az, (-6, -6))
+        entity = "altar" if area == "guardian" else "relic_" + area
+        s.node("Objective_" + entity, "Node3D", properties=f'position = Vector3({px}, 1.0, {pz})\nmetadata/world_entity_id = "{entity}"\nmetadata/world_script = "logic/{entity}.worldscript"')
+        s.box("RelicPlinth", (px, 0.45, pz), (0.8, 0.9, 0.8), stone)
+        s.ellipsoid("RelicSeal", (px, 1.05, pz), (0.28,0.18,0.28), gold)
+        s.label("CRYPT ALTAR" if entity == "altar" else "RELIC SEAL", (px, 2, pz), 24)
     for index, area in enumerate(("camp", "farm", "shrine", "watchtower", "village", "chapel", "forecourt", "crypt_entry", "galleries", "ossuary", "armory", "guardian")):
         ax, az = AREAS[area]
         name = f"Supply_{index:02d}"

@@ -534,21 +534,27 @@ size = Vector3(1.05, 1.1, 1.05)
 size = Vector3(1.1, 0.12, 0.04)
 
 [sub_resource type="BoxMesh" id="r137"]
-size = Vector3(0.45, 0.35, 0.35)
+size = Vector3(0.8, 0.9, 0.8)
 
 [sub_resource type="BoxShape3D" id="r138"]
-size = Vector3(0.45, 0.35, 0.35)
+size = Vector3(0.8, 0.9, 0.8)
 
 [sub_resource type="BoxMesh" id="r139"]
-size = Vector3(1, 10, 370)
+size = Vector3(0.45, 0.35, 0.35)
 
 [sub_resource type="BoxShape3D" id="r140"]
-size = Vector3(1, 10, 370)
+size = Vector3(0.45, 0.35, 0.35)
 
 [sub_resource type="BoxMesh" id="r141"]
-size = Vector3(440, 10, 1)
+size = Vector3(1, 10, 370)
 
 [sub_resource type="BoxShape3D" id="r142"]
+size = Vector3(1, 10, 370)
+
+[sub_resource type="BoxMesh" id="r143"]
+size = Vector3(440, 10, 1)
+
+[sub_resource type="BoxShape3D" id="r144"]
 size = Vector3(440, 10, 1)
 
 [node name="AshenVale" type="Node3D"]
@@ -7903,19 +7909,139 @@ material_override = SubResource("r5")
 [node name="Collision" type="CollisionShape3D" parent="TableLeg_605/Body"]
 shape = SubResource("r131")
 
+[node name="Objective_relic_watchtower" type="Node3D" parent="."]
+position = Vector3(-91, 1.0, -86)
+metadata/world_entity_id = "relic_watchtower"
+metadata/world_script = "logic/relic_watchtower.worldscript"
+
+[node name="RelicPlinth_606" type="MeshInstance3D" parent="."]
+position = Vector3(-91, 0.45, -86)
+mesh = SubResource("r137")
+material_override = SubResource("r2")
+
+[node name="Body" type="StaticBody3D" parent="RelicPlinth_606"]
+
+
+[node name="Collision" type="CollisionShape3D" parent="RelicPlinth_606/Body"]
+shape = SubResource("r138")
+
+[node name="RelicSeal_607" type="MeshInstance3D" parent="."]
+position = Vector3(-91, 1.05, -86)
+scale = Vector3(0.28, 0.18, 0.28)
+mesh = SubResource("r11")
+material_override = SubResource("r8")
+
+[node name="Label_608" type="Label3D" parent="."]
+position = Vector3(-91, 2, -86)
+text = "RELIC SEAL"
+font_size = 24
+pixel_size = 0.012
+billboard = 1
+modulate = Color(0.91, 0.83, 0.64, 1)
+
+[node name="Objective_relic_village" type="Node3D" parent="."]
+position = Vector3(6, 1.0, -81)
+metadata/world_entity_id = "relic_village"
+metadata/world_script = "logic/relic_village.worldscript"
+
+[node name="RelicPlinth_609" type="MeshInstance3D" parent="."]
+position = Vector3(6, 0.45, -81)
+mesh = SubResource("r137")
+material_override = SubResource("r2")
+
+[node name="Body" type="StaticBody3D" parent="RelicPlinth_609"]
+
+
+[node name="Collision" type="CollisionShape3D" parent="RelicPlinth_609/Body"]
+shape = SubResource("r138")
+
+[node name="RelicSeal_610" type="MeshInstance3D" parent="."]
+position = Vector3(6, 1.05, -81)
+scale = Vector3(0.28, 0.18, 0.28)
+mesh = SubResource("r11")
+material_override = SubResource("r8")
+
+[node name="Label_611" type="Label3D" parent="."]
+position = Vector3(6, 2, -81)
+text = "RELIC SEAL"
+font_size = 24
+pixel_size = 0.012
+billboard = 1
+modulate = Color(0.91, 0.83, 0.64, 1)
+
+[node name="Objective_relic_forecourt" type="Node3D" parent="."]
+position = Vector3(79, 1.0, -36)
+metadata/world_entity_id = "relic_forecourt"
+metadata/world_script = "logic/relic_forecourt.worldscript"
+
+[node name="RelicPlinth_612" type="MeshInstance3D" parent="."]
+position = Vector3(79, 0.45, -36)
+mesh = SubResource("r137")
+material_override = SubResource("r2")
+
+[node name="Body" type="StaticBody3D" parent="RelicPlinth_612"]
+
+
+[node name="Collision" type="CollisionShape3D" parent="RelicPlinth_612/Body"]
+shape = SubResource("r138")
+
+[node name="RelicSeal_613" type="MeshInstance3D" parent="."]
+position = Vector3(79, 1.05, -36)
+scale = Vector3(0.28, 0.18, 0.28)
+mesh = SubResource("r11")
+material_override = SubResource("r8")
+
+[node name="Label_614" type="Label3D" parent="."]
+position = Vector3(79, 2, -36)
+text = "RELIC SEAL"
+font_size = 24
+pixel_size = 0.012
+billboard = 1
+modulate = Color(0.91, 0.83, 0.64, 1)
+
+[node name="Objective_altar" type="Node3D" parent="."]
+position = Vector3(99, 1.0, 119)
+metadata/world_entity_id = "altar"
+metadata/world_script = "logic/altar.worldscript"
+
+[node name="RelicPlinth_615" type="MeshInstance3D" parent="."]
+position = Vector3(99, 0.45, 119)
+mesh = SubResource("r137")
+material_override = SubResource("r2")
+
+[node name="Body" type="StaticBody3D" parent="RelicPlinth_615"]
+
+
+[node name="Collision" type="CollisionShape3D" parent="RelicPlinth_615/Body"]
+shape = SubResource("r138")
+
+[node name="RelicSeal_616" type="MeshInstance3D" parent="."]
+position = Vector3(99, 1.05, 119)
+scale = Vector3(0.28, 0.18, 0.28)
+mesh = SubResource("r11")
+material_override = SubResource("r8")
+
+[node name="Label_617" type="Label3D" parent="."]
+position = Vector3(99, 2, 119)
+text = "CRYPT ALTAR"
+font_size = 24
+pixel_size = 0.012
+billboard = 1
+modulate = Color(0.91, 0.83, 0.64, 1)
+
 [node name="Supply_00" type="RigidBody3D" parent="." groups=["world_items"]]
 position = Vector3(6, 1.5, 101)
 mass = 0.5
 metadata/world_entity_id = "supply_00"
 metadata/world_pickup = true
 
-[node name="SupplyCase_606" type="MeshInstance3D" parent="Supply_00"]
+[node name="SupplyCase_618" type="MeshInstance3D" parent="Supply_00"]
 position = Vector3(0, 0, 0)
-mesh = SubResource("r137")
+mesh = SubResource("r139")
 material_override = SubResource("r5")
 
 [node name="Collision" type="CollisionShape3D" parent="Supply_00"]
-shape = SubResource("r138")
+shape = SubResource("r140")
 
 [node name="Supply_01" type="RigidBody3D" parent="." groups=["world_items"]]
 position = Vector3(-66, 1.5, 71)
@@ -7923,13 +8049,13 @@ mass = 0.5
 metadata/world_entity_id = "supply_01"
 metadata/world_pickup = true
 
-[node name="SupplyCase_607" type="MeshInstance3D" parent="Supply_01"]
+[node name="SupplyCase_619" type="MeshInstance3D" parent="Supply_01"]
 position = Vector3(0, 0, 0)
-mesh = SubResource("r137")
+mesh = SubResource("r139")
 material_override = SubResource("r5")
 
 [node name="Collision" type="CollisionShape3D" parent="Supply_01"]
-shape = SubResource("r138")
+shape = SubResource("r140")
 
 [node name="Supply_02" type="RigidBody3D" parent="." groups=["world_items"]]
 position = Vector3(-89, 1.5, 16)
@@ -7937,13 +8063,13 @@ mass = 0.5
 metadata/world_entity_id = "supply_02"
 metadata/world_pickup = true
 
-[node name="SupplyCase_608" type="MeshInstance3D" parent="Supply_02"]
+[node name="SupplyCase_620" type="MeshInstance3D" parent="Supply_02"]
 position = Vector3(0, 0, 0)
-mesh = SubResource("r137")
+mesh = SubResource("r139")
 material_override = SubResource("r5")
 
 [node name="Collision" type="CollisionShape3D" parent="Supply_02"]
-shape = SubResource("r138")
+shape = SubResource("r140")
 
 [node name="Supply_03" type="RigidBody3D" parent="." groups=["world_items"]]
 position = Vector3(-79, 1.5, -74)
@@ -7951,13 +8077,13 @@ mass = 0.5
 metadata/world_entity_id = "supply_03"
 metadata/world_pickup = true
 
-[node name="SupplyCase_609" type="MeshInstance3D" parent="Supply_03"]
+[node name="SupplyCase_621" type="MeshInstance3D" parent="Supply_03"]
 position = Vector3(0, 0, 0)
-mesh = SubResource("r137")
+mesh = SubResource("r139")
 material_override = SubResource("r5")
 
 [node name="Collision" type="CollisionShape3D" parent="Supply_03"]
-shape = SubResource("r138")
+shape = SubResource("r140")
 
 [node name="Supply_04" type="RigidBody3D" parent="." groups=["world_items"]]
 position = Vector3(6, 1.5, -69)
@@ -7965,13 +8091,13 @@ mass = 0.5
 metadata/world_entity_id = "supply_04"
 metadata/world_pickup = true
 
-[node name="SupplyCase_610" type="MeshInstance3D" parent="Supply_04"]
+[node name="SupplyCase_622" type="MeshInstance3D" parent="Supply_04"]
 position = Vector3(0, 0, 0)
-mesh = SubResource("r137")
+mesh = SubResource("r139")
 material_override = SubResource("r5")
 
 [node name="Collision" type="CollisionShape3D" parent="Supply_04"]
-shape = SubResource("r138")
+shape = SubResource("r140")
 
 [node name="Supply_05" type="RigidBody3D" parent="." groups=["world_items"]]
 position = Vector3(81, 1.5, -74)
@@ -7979,13 +8105,13 @@ mass = 0.5
 metadata/world_entity_id = "supply_05"
 metadata/world_pickup = true
 
-[node name="SupplyCase_611" type="MeshInstance3D" parent="Supply_05"]
+[node name="SupplyCase_623" type="MeshInstance3D" parent="Supply_05"]
 position = Vector3(0, 0, 0)
-mesh = SubResource("r137")
+mesh = SubResource("r139")
 material_override = SubResource("r5")
 
 [node name="Collision" type="CollisionShape3D" parent="Supply_05"]
-shape = SubResource("r138")
+shape = SubResource("r140")
 
 [node name="Supply_06" type="RigidBody3D" parent="." groups=["world_items"]]
 position = Vector3(91, 1.5, -24)
@@ -7993,13 +8119,13 @@ mass = 0.5
 metadata/world_entity_id = "supply_06"
 metadata/world_pickup = true
 
-[node name="SupplyCase_612" type="MeshInstance3D" parent="Supply_06"]
+[node name="SupplyCase_624" type="MeshInstance3D" parent="Supply_06"]
 position = Vector3(0, 0, 0)
-mesh = SubResource("r137")
+mesh = SubResource("r139")
 material_override = SubResource("r5")
 
 [node name="Collision" type="CollisionShape3D" parent="Supply_06"]
-shape = SubResource("r138")
+shape = SubResource("r140")
 
 [node name="Supply_07" type="RigidBody3D" parent="." groups=["world_items"]]
 position = Vector3(111, 1.5, 14)
@@ -8007,13 +8133,13 @@ mass = 0.5
 metadata/world_entity_id = "supply_07"
 metadata/world_pickup = true
 
-[node name="SupplyCase_613" type="MeshInstance3D" parent="Supply_07"]
+[node name="SupplyCase_625" type="MeshInstance3D" parent="Supply_07"]
 position = Vector3(0, 0, 0)
-mesh = SubResource("r137")
+mesh = SubResource("r139")
 material_override = SubResource("r5")
 
 [node name="Collision" type="CollisionShape3D" parent="Supply_07"]
-shape = SubResource("r138")
+shape = SubResource("r140")
 
 [node name="Supply_08" type="RigidBody3D" parent="." groups=["world_items"]]
 position = Vector3(111, 1.5, 32)
@@ -8021,13 +8147,13 @@ mass = 0.5
 metadata/world_entity_id = "supply_08"
 metadata/world_pickup = true
 
-[node name="SupplyCase_614" type="MeshInstance3D" parent="Supply_08"]
+[node name="SupplyCase_626" type="MeshInstance3D" parent="Supply_08"]
 position = Vector3(0, 0, 0)
-mesh = SubResource("r137")
+mesh = SubResource("r139")
 material_override = SubResource("r5")
 
 [node name="Collision" type="CollisionShape3D" parent="Supply_08"]
-shape = SubResource("r138")
+shape = SubResource("r140")
 
 [node name="Supply_09" type="RigidBody3D" parent="." groups=["world_items"]]
 position = Vector3(74, 1.5, 62)
@@ -8035,13 +8161,13 @@ mass = 0.5
 metadata/world_entity_id = "supply_09"
 metadata/world_pickup = true
 
-[node name="SupplyCase_615" type="MeshInstance3D" parent="Supply_09"]
+[node name="SupplyCase_627" type="MeshInstance3D" parent="Supply_09"]
 position = Vector3(0, 0, 0)
-mesh = SubResource("r137")
+mesh = SubResource("r139")
 material_override = SubResource("r5")
 
 [node name="Collision" type="CollisionShape3D" parent="Supply_09"]
-shape = SubResource("r138")
+shape = SubResource("r140")
 
 [node name="Supply_10" type="RigidBody3D" parent="." groups=["world_items"]]
 position = Vector3(136, 1.5, 74)
@@ -8049,13 +8175,13 @@ mass = 0.5
 metadata/world_entity_id = "supply_10"
 metadata/world_pickup = true
 
-[node name="SupplyCase_616" type="MeshInstance3D" parent="Supply_10"]
+[node name="SupplyCase_628" type="MeshInstance3D" parent="Supply_10"]
 position = Vector3(0, 0, 0)
-mesh = SubResource("r137")
+mesh = SubResource("r139")
 material_override = SubResource("r5")
 
 [node name="Collision" type="CollisionShape3D" parent="Supply_10"]
-shape = SubResource("r138")
+shape = SubResource("r140")
 
 [node name="Supply_11" type="RigidBody3D" parent="." groups=["world_items"]]
 position = Vector3(111, 1.5, 131)
@@ -8063,13 +8189,13 @@ mass = 0.5
 metadata/world_entity_id = "supply_11"
 metadata/world_pickup = true
 
-[node name="SupplyCase_617" type="MeshInstance3D" parent="Supply_11"]
+[node name="SupplyCase_629" type="MeshInstance3D" parent="Supply_11"]
 position = Vector3(0, 0, 0)
-mesh = SubResource("r137")
+mesh = SubResource("r139")
 material_override = SubResource("r5")
 
 [node name="Collision" type="CollisionShape3D" parent="Supply_11"]
-shape = SubResource("r138")
+shape = SubResource("r140")
 
 [node name="Pine_0" parent="." instance=ExtResource("pine_sapling_small")]
 position = Vector3(95.25694989621599, 0, -110.93669262938484)
@@ -8946,547 +9072,547 @@ scale = Vector3(1.170943876247134, 1.170943876247134, 1.170943876247134)
 position = Vector3(-107.03406368521313, 0, 182.55049602443165)
 scale = Vector3(1.8347403620789196, 1.8347403620789196, 1.8347403620789196)
 
-[node name="Foothill_618" type="MeshInstance3D" parent="."]
+[node name="Foothill_630" type="MeshInstance3D" parent="."]
 position = Vector3(-250, -8, -200)
 scale = Vector3(43.30267547773215, 38.9033432725088, 45)
 mesh = SubResource("r11")
 material_override = SubResource("r1")
 
-[node name="DistantPeak_619" type="MeshInstance3D" parent="."]
+[node name="DistantPeak_631" type="MeshInstance3D" parent="."]
 position = Vector3(-250, -5, -270.0)
 scale = Vector3(60, 79.06939944376262, 70)
 mesh = SubResource("r11")
 material_override = SubResource("r9")
 
-[node name="Foothill_620" type="MeshInstance3D" parent="."]
+[node name="Foothill_632" type="MeshInstance3D" parent="."]
 position = Vector3(-250, -8, 230)
 scale = Vector3(38.09079689552177, 30.25804405587471, 45)
 mesh = SubResource("r11")
 material_override = SubResource("r1")
 
-[node name="DistantPeak_621" type="MeshInstance3D" parent="."]
+[node name="DistantPeak_633" type="MeshInstance3D" parent="."]
 position = Vector3(-250, -5, 310.5)
 scale = Vector3(60, 71.82365977456337, 70)
 mesh = SubResource("r11")
 material_override = SubResource("r9")
 
-[node name="Foothill_622" type="MeshInstance3D" parent="."]
+[node name="Foothill_634" type="MeshInstance3D" parent="."]
 position = Vector3(-214, -8, -200)
 scale = Vector3(54.82531199979476, 34.52009475526246, 45)
 mesh = SubResource("r11")
 material_override = SubResource("r1")
 
-[node name="DistantPeak_623" type="MeshInstance3D" parent="."]
+[node name="DistantPeak_635" type="MeshInstance3D" parent="."]
 position = Vector3(-214, -5, -270.0)
 scale = Vector3(60, 70.40775185864678, 70)
 mesh = SubResource("r11")
 material_override = SubResource("r9")
 
-[node name="Foothill_624" type="MeshInstance3D" parent="."]
+[node name="Foothill_636" type="MeshInstance3D" parent="."]
 position = Vector3(-214, -8, 230)
 scale = Vector3(51.53197156584256, 26.89830708150451, 45)
 mesh = SubResource("r11")
 material_override = SubResource("r1")
 
-[node name="DistantPeak_625" type="MeshInstance3D" parent="."]
+[node name="DistantPeak_637" type="MeshInstance3D" parent="."]
 position = Vector3(-214, -5, 310.5)
 scale = Vector3(60, 77.18147397363227, 70)
 mesh = SubResource("r11")
 material_override = SubResource("r9")
 
-[node name="Foothill_626" type="MeshInstance3D" parent="."]
+[node name="Foothill_638" type="MeshInstance3D" parent="."]
 position = Vector3(-178, -8, -200)
 scale = Vector3(44.19769775494217, 32.421128454007544, 45)
 mesh = SubResource("r11")
 material_override = SubResource("r1")
 
-[node name="DistantPeak_627" type="MeshInstance3D" parent="."]
+[node name="DistantPeak_639" type="MeshInstance3D" parent="."]
 position = Vector3(-178, -5, -270.0)
 scale = Vector3(60, 71.51966482901994, 70)
 mesh = SubResource("r11")
 material_override = SubResource("r9")
 
-[node name="Foothill_628" type="MeshInstance3D" parent="."]
+[node name="Foothill_640" type="MeshInstance3D" parent="."]
 position = Vector3(-178, -8, 230)
 scale = Vector3(40.96666200940495, 30.826643654468825, 45)
 mesh = SubResource("r11")
 material_override = SubResource("r1")
 
-[node name="DistantPeak_629" type="MeshInstance3D" parent="."]
+[node name="DistantPeak_641" type="MeshInstance3D" parent="."]
 position = Vector3(-178, -5, 310.5)
 scale = Vector3(60, 61.37156300655836, 70)
 mesh = SubResource("r11")
 material_override = SubResource("r9")
 
-[node name="Foothill_630" type="MeshInstance3D" parent="."]
+[node name="Foothill_642" type="MeshInstance3D" parent="."]
 position = Vector3(-142, -8, -200)
 scale = Vector3(36.306649307174865, 24.277363137354044, 45)
 mesh = SubResource("r11")
 material_override = SubResource("r1")
 
-[node name="DistantPeak_631" type="MeshInstance3D" parent="."]
+[node name="DistantPeak_643" type="MeshInstance3D" parent="."]
 position = Vector3(-142, -5, -270.0)
 scale = Vector3(60, 50.523072837505005, 70)
 mesh = SubResource("r11")
 material_override = SubResource("r9")
 
-[node name="Foothill_632" type="MeshInstance3D" parent="."]
+[node name="Foothill_644" type="MeshInstance3D" parent="."]
 position = Vector3(-142, -8, 230)
 scale = Vector3(50.954271350408604, 35.66290197459615, 45)
 mesh = SubResource("r11")
 material_override = SubResource("r1")
 
-[node name="DistantPeak_633" type="MeshInstance3D" parent="."]
+[node name="DistantPeak_645" type="MeshInstance3D" parent="."]
 position = Vector3(-142, -5, 310.5)
 scale = Vector3(60, 83.62178818503355, 70)
 mesh = SubResource("r11")
 material_override = SubResource("r9")
 
-[node name="Foothill_634" type="MeshInstance3D" parent="."]
+[node name="Foothill_646" type="MeshInstance3D" parent="."]
 position = Vector3(-106, -8, -200)
 scale = Vector3(49.84156890421369, 23.029375583785775, 45)
 mesh = SubResource("r11")
 material_override = SubResource("r1")
 
-[node name="DistantPeak_635" type="MeshInstance3D" parent="."]
+[node name="DistantPeak_647" type="MeshInstance3D" parent="."]
 position = Vector3(-106, -5, -270.0)
 scale = Vector3(60, 72.66479328998673, 70)
 mesh = SubResource("r11")
 material_override = SubResource("r9")
 
-[node name="Foothill_636" type="MeshInstance3D" parent="."]
+[node name="Foothill_648" type="MeshInstance3D" parent="."]
 position = Vector3(-106, -8, 230)
 scale = Vector3(46.48669808363864, 37.44970462720878, 45)
 mesh = SubResource("r11")
 material_override = SubResource("r1")
 
-[node name="DistantPeak_637" type="MeshInstance3D" parent="."]
+[node name="DistantPeak_649" type="MeshInstance3D" parent="."]
 position = Vector3(-106, -5, 310.5)
 scale = Vector3(60, 59.18297111159624, 70)
 mesh = SubResource("r11")
 material_override = SubResource("r9")
 
-[node name="Foothill_638" type="MeshInstance3D" parent="."]
+[node name="Foothill_650" type="MeshInstance3D" parent="."]
 position = Vector3(-70, -8, -200)
 scale = Vector3(44.18290278658123, 24.585225040665918, 45)
 mesh = SubResource("r11")
 material_override = SubResource("r1")
 
-[node name="DistantPeak_639" type="MeshInstance3D" parent="."]
+[node name="DistantPeak_651" type="MeshInstance3D" parent="."]
 position = Vector3(-70, -5, -270.0)
 scale = Vector3(60, 80.84362818412684, 70)
 mesh = SubResource("r11")
 material_override = SubResource("r9")
 
-[node name="Foothill_640" type="MeshInstance3D" parent="."]
+[node name="Foothill_652" type="MeshInstance3D" parent="."]
 position = Vector3(-70, -8, 230)
 scale = Vector3(46.989040020974215, 20.824648867614677, 45)
 mesh = SubResource("r11")
 material_override = SubResource("r1")
 
-[node name="DistantPeak_641" type="MeshInstance3D" parent="."]
+[node name="DistantPeak_653" type="MeshInstance3D" parent="."]
 position = Vector3(-70, -5, 310.5)
 scale = Vector3(60, 61.666223795855345, 70)
 mesh = SubResource("r11")
 material_override = SubResource("r9")
 
-[node name="Foothill_642" type="MeshInstance3D" parent="."]
+[node name="Foothill_654" type="MeshInstance3D" parent="."]
 position = Vector3(-34, -8, -200)
 scale = Vector3(53.749767274402714, 29.013378064548192, 45)
 mesh = SubResource("r11")
 material_override = SubResource("r1")
 
-[node name="DistantPeak_643" type="MeshInstance3D" parent="."]
+[node name="DistantPeak_655" type="MeshInstance3D" parent="."]
 position = Vector3(-34, -5, -270.0)
 scale = Vector3(60, 77.09957341808537, 70)
 mesh = SubResource("r11")
 material_override = SubResource("r9")
 
-[node name="Foothill_644" type="MeshInstance3D" parent="."]
+[node name="Foothill_656" type="MeshInstance3D" parent="."]
 position = Vector3(-34, -8, 230)
 scale = Vector3(38.479527585614925, 31.01006422963163, 45)
 mesh = SubResource("r11")
 material_override = SubResource("r1")
 
-[node name="DistantPeak_645" type="MeshInstance3D" parent="."]
+[node name="DistantPeak_657" type="MeshInstance3D" parent="."]
 position = Vector3(-34, -5, 310.5)
 scale = Vector3(60, 71.19706609804508, 70)
 mesh = SubResource("r11")
 material_override = SubResource("r9")
 
-[node name="Foothill_646" type="MeshInstance3D" parent="."]
+[node name="Foothill_658" type="MeshInstance3D" parent="."]
 position = Vector3(2, -8, -200)
 scale = Vector3(43.72038273354496, 26.67205831654399, 45)
 mesh = SubResource("r11")
 material_override = SubResource("r1")
 
-[node name="DistantPeak_647" type="MeshInstance3D" parent="."]
+[node name="DistantPeak_659" type="MeshInstance3D" parent="."]
 position = Vector3(2, -5, -270.0)
 scale = Vector3(60, 75.49293588992415, 70)
 mesh = SubResource("r11")
 material_override = SubResource("r9")
 
-[node name="Foothill_648" type="MeshInstance3D" parent="."]
+[node name="Foothill_660" type="MeshInstance3D" parent="."]
 position = Vector3(2, -8, 230)
 scale = Vector3(50.1362946971216, 27.169563730585267, 45)
 mesh = SubResource("r11")
 material_override = SubResource("r1")
 
-[node name="DistantPeak_649" type="MeshInstance3D" parent="."]
+[node name="DistantPeak_661" type="MeshInstance3D" parent="."]
 position = Vector3(2, -5, 310.5)
 scale = Vector3(60, 51.98095722098978, 70)
 mesh = SubResource("r11")
 material_override = SubResource("r9")
 
-[node name="Foothill_650" type="MeshInstance3D" parent="."]
+[node name="Foothill_662" type="MeshInstance3D" parent="."]
 position = Vector3(38, -8, -200)
 scale = Vector3(54.766883470735515, 33.90559247908816, 45)
 mesh = SubResource("r11")
 material_override = SubResource("r1")
 
-[node name="DistantPeak_651" type="MeshInstance3D" parent="."]
+[node name="DistantPeak_663" type="MeshInstance3D" parent="."]
 position = Vector3(38, -5, -270.0)
 scale = Vector3(60, 48.51575534793988, 70)
 mesh = SubResource("r11")
 material_override = SubResource("r9")
 
-[node name="Foothill_652" type="MeshInstance3D" parent="."]
+[node name="Foothill_664" type="MeshInstance3D" parent="."]
 position = Vector3(38, -8, 230)
 scale = Vector3(52.93028791178086, 33.19053903257003, 45)
 mesh = SubResource("r11")
 material_override = SubResource("r1")
 
-[node name="DistantPeak_653" type="MeshInstance3D" parent="."]
+[node name="DistantPeak_665" type="MeshInstance3D" parent="."]
 position = Vector3(38, -5, 310.5)
 scale = Vector3(60, 50.983883847454415, 70)
 mesh = SubResource("r11")
 material_override = SubResource("r9")
 
-[node name="Foothill_654" type="MeshInstance3D" parent="."]
+[node name="Foothill_666" type="MeshInstance3D" parent="."]
 position = Vector3(74, -8, -200)
 scale = Vector3(42.75418308404529, 26.117320490640402, 45)
 mesh = SubResource("r11")
 material_override = SubResource("r1")
 
-[node name="DistantPeak_655" type="MeshInstance3D" parent="."]
+[node name="DistantPeak_667" type="MeshInstance3D" parent="."]
 position = Vector3(74, -5, -270.0)
 scale = Vector3(60, 82.36133915383857, 70)
 mesh = SubResource("r11")
 material_override = SubResource("r9")
 
-[node name="Foothill_656" type="MeshInstance3D" parent="."]
+[node name="Foothill_668" type="MeshInstance3D" parent="."]
 position = Vector3(74, -8, 230)
 scale = Vector3(42.261135326588466, 34.48773446718701, 45)
 mesh = SubResource("r11")
 material_override = SubResource("r1")
 
-[node name="DistantPeak_657" type="MeshInstance3D" parent="."]
+[node name="DistantPeak_669" type="MeshInstance3D" parent="."]
 position = Vector3(74, -5, 310.5)
 scale = Vector3(60, 52.19760442640097, 70)
 mesh = SubResource("r11")
 material_override = SubResource("r9")
 
-[node name="Foothill_658" type="MeshInstance3D" parent="."]
+[node name="Foothill_670" type="MeshInstance3D" parent="."]
 position = Vector3(110, -8, -200)
 scale = Vector3(51.171410449273395, 23.52078149017563, 45)
 mesh = SubResource("r11")
 material_override = SubResource("r1")
 
-[node name="DistantPeak_659" type="MeshInstance3D" parent="."]
+[node name="DistantPeak_671" type="MeshInstance3D" parent="."]
 position = Vector3(110, -5, -270.0)
 scale = Vector3(60, 83.38427917058786, 70)
 mesh = SubResource("r11")
 material_override = SubResource("r9")
 
-[node name="Foothill_660" type="MeshInstance3D" parent="."]
+[node name="Foothill_672" type="MeshInstance3D" parent="."]
 position = Vector3(110, -8, 230)
 scale = Vector3(53.00528446906095, 29.09357923796519, 45)
 mesh = SubResource("r11")
 material_override = SubResource("r1")
 
-[node name="DistantPeak_661" type="MeshInstance3D" parent="."]
+[node name="DistantPeak_673" type="MeshInstance3D" parent="."]
 position = Vector3(110, -5, 310.5)
 scale = Vector3(60, 46.5285927480465, 70)
 mesh = SubResource("r11")
 material_override = SubResource("r9")
 
-[node name="Foothill_662" type="MeshInstance3D" parent="."]
+[node name="Foothill_674" type="MeshInstance3D" parent="."]
 position = Vector3(146, -8, -200)
 scale = Vector3(50.55912321991296, 37.2320589832929, 45)
 mesh = SubResource("r11")
 material_override = SubResource("r1")
 
-[node name="DistantPeak_663" type="MeshInstance3D" parent="."]
+[node name="DistantPeak_675" type="MeshInstance3D" parent="."]
 position = Vector3(146, -5, -270.0)
 scale = Vector3(60, 64.38201713238901, 70)
 mesh = SubResource("r11")
 material_override = SubResource("r9")
 
-[node name="Foothill_664" type="MeshInstance3D" parent="."]
+[node name="Foothill_676" type="MeshInstance3D" parent="."]
 position = Vector3(146, -8, 230)
 scale = Vector3(53.92955000662586, 36.27866266516576, 45)
 mesh = SubResource("r11")
 material_override = SubResource("r1")
 
-[node name="DistantPeak_665" type="MeshInstance3D" parent="."]
+[node name="DistantPeak_677" type="MeshInstance3D" parent="."]
 position = Vector3(146, -5, 310.5)
 scale = Vector3(60, 83.80190575374763, 70)
 mesh = SubResource("r11")
 material_override = SubResource("r9")
 
-[node name="Foothill_666" type="MeshInstance3D" parent="."]
+[node name="Foothill_678" type="MeshInstance3D" parent="."]
 position = Vector3(182, -8, -200)
 scale = Vector3(37.93366507987541, 21.556500507022157, 45)
 mesh = SubResource("r11")
 material_override = SubResource("r1")
 
-[node name="DistantPeak_667" type="MeshInstance3D" parent="."]
+[node name="DistantPeak_679" type="MeshInstance3D" parent="."]
 position = Vector3(182, -5, -270.0)
 scale = Vector3(60, 83.86177749912918, 70)
 mesh = SubResource("r11")
 material_override = SubResource("r9")
 
-[node name="Foothill_668" type="MeshInstance3D" parent="."]
+[node name="Foothill_680" type="MeshInstance3D" parent="."]
 position = Vector3(182, -8, 230)
 scale = Vector3(51.50541502775333, 24.60262847752339, 45)
 mesh = SubResource("r11")
 material_override = SubResource("r1")
 
-[node name="DistantPeak_669" type="MeshInstance3D" parent="."]
+[node name="DistantPeak_681" type="MeshInstance3D" parent="."]
 position = Vector3(182, -5, 310.5)
 scale = Vector3(60, 75.56942052577443, 70)
 mesh = SubResource("r11")
 material_override = SubResource("r9")
 
-[node name="Foothill_670" type="MeshInstance3D" parent="."]
+[node name="Foothill_682" type="MeshInstance3D" parent="."]
 position = Vector3(218, -8, -200)
 scale = Vector3(39.93506081908924, 32.82618069012277, 45)
 mesh = SubResource("r11")
 material_override = SubResource("r1")
 
-[node name="DistantPeak_671" type="MeshInstance3D" parent="."]
+[node name="DistantPeak_683" type="MeshInstance3D" parent="."]
 position = Vector3(218, -5, -270.0)
 scale = Vector3(60, 78.84598412519117, 70)
 mesh = SubResource("r11")
 material_override = SubResource("r9")
 
-[node name="Foothill_672" type="MeshInstance3D" parent="."]
+[node name="Foothill_684" type="MeshInstance3D" parent="."]
 position = Vector3(218, -8, 230)
 scale = Vector3(37.309050628377925, 26.035937428723003, 45)
 mesh = SubResource("r11")
 material_override = SubResource("r1")
 
-[node name="DistantPeak_673" type="MeshInstance3D" parent="."]
+[node name="DistantPeak_685" type="MeshInstance3D" parent="."]
 position = Vector3(218, -5, 310.5)
 scale = Vector3(60, 68.07916719838454, 70)
 mesh = SubResource("r11")
 material_override = SubResource("r9")
 
-[node name="Foothill_674" type="MeshInstance3D" parent="."]
+[node name="Foothill_686" type="MeshInstance3D" parent="."]
 position = Vector3(254, -8, -200)
 scale = Vector3(50.1675029780526, 26.896145150780498, 45)
 mesh = SubResource("r11")
 material_override = SubResource("r1")
 
-[node name="DistantPeak_675" type="MeshInstance3D" parent="."]
+[node name="DistantPeak_687" type="MeshInstance3D" parent="."]
 position = Vector3(254, -5, -270.0)
 scale = Vector3(60, 64.21274227906642, 70)
 mesh = SubResource("r11")
 material_override = SubResource("r9")
 
-[node name="Foothill_676" type="MeshInstance3D" parent="."]
+[node name="Foothill_688" type="MeshInstance3D" parent="."]
 position = Vector3(254, -8, 230)
 scale = Vector3(52.365244235896625, 40.93231524810939, 45)
 mesh = SubResource("r11")
 material_override = SubResource("r1")
 
-[node name="DistantPeak_677" type="MeshInstance3D" parent="."]
+[node name="DistantPeak_689" type="MeshInstance3D" parent="."]
 position = Vector3(254, -5, 310.5)
 scale = Vector3(60, 54.40084330314428, 70)
 mesh = SubResource("r11")
 material_override = SubResource("r9")
 
-[node name="Foothill_678" type="MeshInstance3D" parent="."]
+[node name="Foothill_690" type="MeshInstance3D" parent="."]
 position = Vector3(-250, -9, -175)
 scale = Vector3(45, 37.21221645525084, 45)
 mesh = SubResource("r11")
 material_override = SubResource("r1")
 
-[node name="Foothill_679" type="MeshInstance3D" parent="."]
+[node name="Foothill_691" type="MeshInstance3D" parent="."]
 position = Vector3(250, -9, -175)
 scale = Vector3(45, 35.7405910215718, 45)
 mesh = SubResource("r11")
 material_override = SubResource("r1")
 
-[node name="Foothill_680" type="MeshInstance3D" parent="."]
+[node name="Foothill_692" type="MeshInstance3D" parent="."]
 position = Vector3(-250, -9, -137)
 scale = Vector3(45, 26.107791010038333, 45)
 mesh = SubResource("r11")
 material_override = SubResource("r1")
 
-[node name="Foothill_681" type="MeshInstance3D" parent="."]
+[node name="Foothill_693" type="MeshInstance3D" parent="."]
 position = Vector3(250, -9, -137)
 scale = Vector3(45, 35.393671178517735, 45)
 mesh = SubResource("r11")
 material_override = SubResource("r1")
 
-[node name="Foothill_682" type="MeshInstance3D" parent="."]
+[node name="Foothill_694" type="MeshInstance3D" parent="."]
 position = Vector3(-250, -9, -99)
 scale = Vector3(45, 34.21802874509541, 45)
 mesh = SubResource("r11")
 material_override = SubResource("r1")
 
-[node name="Foothill_683" type="MeshInstance3D" parent="."]
+[node name="Foothill_695" type="MeshInstance3D" parent="."]
 position = Vector3(250, -9, -99)
 scale = Vector3(45, 35.53198616361708, 45)
 mesh = SubResource("r11")
 material_override = SubResource("r1")
 
-[node name="Foothill_684" type="MeshInstance3D" parent="."]
+[node name="Foothill_696" type="MeshInstance3D" parent="."]
 position = Vector3(-250, -9, -61)
 scale = Vector3(45, 23.53772226281145, 45)
 mesh = SubResource("r11")
 material_override = SubResource("r1")
 
-[node name="Foothill_685" type="MeshInstance3D" parent="."]
+[node name="Foothill_697" type="MeshInstance3D" parent="."]
 position = Vector3(250, -9, -61)
 scale = Vector3(45, 33.33475109622531, 45)
 mesh = SubResource("r11")
 material_override = SubResource("r1")
 
-[node name="Foothill_686" type="MeshInstance3D" parent="."]
+[node name="Foothill_698" type="MeshInstance3D" parent="."]
 position = Vector3(-250, -9, -23)
 scale = Vector3(45, 27.401097826635883, 45)
 mesh = SubResource("r11")
 material_override = SubResource("r1")
 
-[node name="Foothill_687" type="MeshInstance3D" parent="."]
+[node name="Foothill_699" type="MeshInstance3D" parent="."]
 position = Vector3(250, -9, -23)
 scale = Vector3(45, 23.411151245107344, 45)
 mesh = SubResource("r11")
 material_override = SubResource("r1")
 
-[node name="Foothill_688" type="MeshInstance3D" parent="."]
+[node name="Foothill_700" type="MeshInstance3D" parent="."]
 position = Vector3(-250, -9, 15)
 scale = Vector3(45, 28.635359093637366, 45)
 mesh = SubResource("r11")
 material_override = SubResource("r1")
 
-[node name="Foothill_689" type="MeshInstance3D" parent="."]
+[node name="Foothill_701" type="MeshInstance3D" parent="."]
 position = Vector3(250, -9, 15)
 scale = Vector3(45, 36.92071895334812, 45)
 mesh = SubResource("r11")
 material_override = SubResource("r1")
 
-[node name="Foothill_690" type="MeshInstance3D" parent="."]
+[node name="Foothill_702" type="MeshInstance3D" parent="."]
 position = Vector3(-250, -9, 53)
 scale = Vector3(45, 24.02794007447156, 45)
 mesh = SubResource("r11")
 material_override = SubResource("r1")
 
-[node name="Foothill_691" type="MeshInstance3D" parent="."]
+[node name="Foothill_703" type="MeshInstance3D" parent="."]
 position = Vector3(250, -9, 53)
 scale = Vector3(45, 38.51620581799293, 45)
 mesh = SubResource("r11")
 material_override = SubResource("r1")
 
-[node name="Foothill_692" type="MeshInstance3D" parent="."]
+[node name="Foothill_704" type="MeshInstance3D" parent="."]
 position = Vector3(-250, -9, 91)
 scale = Vector3(45, 38.8745144369946, 45)
 mesh = SubResource("r11")
 material_override = SubResource("r1")
 
-[node name="Foothill_693" type="MeshInstance3D" parent="."]
+[node name="Foothill_705" type="MeshInstance3D" parent="."]
 position = Vector3(250, -9, 91)
 scale = Vector3(45, 30.50271047270781, 45)
 mesh = SubResource("r11")
 material_override = SubResource("r1")
 
-[node name="Foothill_694" type="MeshInstance3D" parent="."]
+[node name="Foothill_706" type="MeshInstance3D" parent="."]
 position = Vector3(-250, -9, 129)
 scale = Vector3(45, 25.75405355234113, 45)
 mesh = SubResource("r11")
 material_override = SubResource("r1")
 
-[node name="Foothill_695" type="MeshInstance3D" parent="."]
+[node name="Foothill_707" type="MeshInstance3D" parent="."]
 position = Vector3(250, -9, 129)
 scale = Vector3(45, 35.56884081642877, 45)
 mesh = SubResource("r11")
 material_override = SubResource("r1")
 
-[node name="Foothill_696" type="MeshInstance3D" parent="."]
+[node name="Foothill_708" type="MeshInstance3D" parent="."]
 position = Vector3(-250, -9, 167)
 scale = Vector3(45, 34.0602705040542, 45)
 mesh = SubResource("r11")
 material_override = SubResource("r1")
 
-[node name="Foothill_697" type="MeshInstance3D" parent="."]
+[node name="Foothill_709" type="MeshInstance3D" parent="."]
 position = Vector3(250, -9, 167)
 scale = Vector3(45, 37.37158285847933, 45)
 mesh = SubResource("r11")
 material_override = SubResource("r1")
 
-[node name="Foothill_698" type="MeshInstance3D" parent="."]
+[node name="Foothill_710" type="MeshInstance3D" parent="."]
 position = Vector3(-250, -9, 205)
 scale = Vector3(45, 23.33080527645233, 45)
 mesh = SubResource("r11")
 material_override = SubResource("r1")
 
-[node name="Foothill_699" type="MeshInstance3D" parent="."]
+[node name="Foothill_711" type="MeshInstance3D" parent="."]
 position = Vector3(250, -9, 205)
 scale = Vector3(45, 32.77755065219976, 45)
 mesh = SubResource("r11")
 material_override = SubResource("r1")
 
-[node name="Boundary_700" type="MeshInstance3D" parent="."]
+[node name="Boundary_712" type="MeshInstance3D" parent="."]
 position = Vector3(-220, 5, 15)
-mesh = SubResource("r139")
+mesh = SubResource("r141")
 material_override = SubResource("r2")
 visible = false
 
-[node name="Body" type="StaticBody3D" parent="Boundary_700"]
+[node name="Body" type="StaticBody3D" parent="Boundary_712"]
 
 
-[node name="Collision" type="CollisionShape3D" parent="Boundary_700/Body"]
-shape = SubResource("r140")
+[node name="Collision" type="CollisionShape3D" parent="Boundary_712/Body"]
+shape = SubResource("r142")
 
-[node name="Boundary_701" type="MeshInstance3D" parent="."]
+[node name="Boundary_713" type="MeshInstance3D" parent="."]
 position = Vector3(220, 5, 15)
-mesh = SubResource("r139")
+mesh = SubResource("r141")
 material_override = SubResource("r2")
 visible = false
 
-[node name="Body" type="StaticBody3D" parent="Boundary_701"]
+[node name="Body" type="StaticBody3D" parent="Boundary_713"]
 
 
-[node name="Collision" type="CollisionShape3D" parent="Boundary_701/Body"]
-shape = SubResource("r140")
+[node name="Collision" type="CollisionShape3D" parent="Boundary_713/Body"]
+shape = SubResource("r142")
 
-[node name="Boundary_702" type="MeshInstance3D" parent="."]
+[node name="Boundary_714" type="MeshInstance3D" parent="."]
 position = Vector3(0, 5, -170)
-mesh = SubResource("r141")
+mesh = SubResource("r143")
 material_override = SubResource("r2")
 visible = false
 
-[node name="Body" type="StaticBody3D" parent="Boundary_702"]
+[node name="Body" type="StaticBody3D" parent="Boundary_714"]
 
 
-[node name="Collision" type="CollisionShape3D" parent="Boundary_702/Body"]
-shape = SubResource("r142")
+[node name="Collision" type="CollisionShape3D" parent="Boundary_714/Body"]
+shape = SubResource("r144")
 
-[node name="Boundary_703" type="MeshInstance3D" parent="."]
+[node name="Boundary_715" type="MeshInstance3D" parent="."]
 position = Vector3(0, 5, 200)
-mesh = SubResource("r141")
+mesh = SubResource("r143")
 material_override = SubResource("r2")
 visible = false
 
-[node name="Body" type="StaticBody3D" parent="Boundary_703"]
+[node name="Body" type="StaticBody3D" parent="Boundary_715"]
 
 
-[node name="Collision" type="CollisionShape3D" parent="Boundary_703/Body"]
-shape = SubResource("r142")
+[node name="Collision" type="CollisionShape3D" parent="Boundary_715/Body"]
+shape = SubResource("r144")
 
-[node name="Label_704" type="Label3D" parent="."]
+[node name="Label_716" type="Label3D" parent="."]
 position = Vector3(0, 4, 95)
 text = "CAMP"
 font_size = 40
@@ -9498,7 +9624,7 @@ modulate = Color(0.91, 0.83, 0.64, 1)
 position = Vector3(0, 0.5, 95)
 metadata/area_id = "camp"
 
-[node name="Label_705" type="Label3D" parent="."]
+[node name="Label_717" type="Label3D" parent="."]
 position = Vector3(0, 4, 70)
 text = "SOUTH ROAD"
 font_size = 40
@@ -9510,7 +9636,7 @@ modulate = Color(0.91, 0.83, 0.64, 1)
 position = Vector3(0, 0.5, 70)
 metadata/area_id = "south_road"
 
-[node name="Label_706" type="Label3D" parent="."]
+[node name="Label_718" type="Label3D" parent="."]
 position = Vector3(0, 4, 30)
 text = "FIELD"
 font_size = 40
@@ -9522,7 +9648,7 @@ modulate = Color(0.91, 0.83, 0.64, 1)
 position = Vector3(0, 0.5, 30)
 metadata/area_id = "field"
 
-[node name="Label_707" type="Label3D" parent="."]
+[node name="Label_719" type="Label3D" parent="."]
 position = Vector3(-72, 4, 65)
 text = "FARM"
 font_size = 40
@@ -9534,7 +9660,7 @@ modulate = Color(0.91, 0.83, 0.64, 1)
 position = Vector3(-72, 0.5, 65)
 metadata/area_id = "farm"
 
-[node name="Label_708" type="Label3D" parent="."]
+[node name="Label_720" type="Label3D" parent="."]
 position = Vector3(-95, 4, 22)
 text = "SHRINE"
 font_size = 40
@@ -9546,7 +9672,7 @@ modulate = Color(0.91, 0.83, 0.64, 1)
 position = Vector3(-95, 0.5, 22)
 metadata/area_id = "shrine"
 
-[node name="Label_709" type="Label3D" parent="."]
+[node name="Label_721" type="Label3D" parent="."]
 position = Vector3(-95, 4, -25)
 text = "WOODLAND"
 font_size = 40
@@ -9558,7 +9684,7 @@ modulate = Color(0.91, 0.83, 0.64, 1)
 position = Vector3(-95, 0.5, -25)
 metadata/area_id = "woodland"
 
-[node name="Label_710" type="Label3D" parent="."]
+[node name="Label_722" type="Label3D" parent="."]
 position = Vector3(-85, 4, -80)
 text = "WATCHTOWER"
 font_size = 40
@@ -9570,7 +9696,7 @@ modulate = Color(0.91, 0.83, 0.64, 1)
 position = Vector3(-85, 0.5, -80)
 metadata/area_id = "watchtower"
 
-[node name="Label_711" type="Label3D" parent="."]
+[node name="Label_723" type="Label3D" parent="."]
 position = Vector3(30, 4, 50)
 text = "FORD"
 font_size = 40
@@ -9582,7 +9708,7 @@ modulate = Color(0.91, 0.83, 0.64, 1)
 position = Vector3(30, 0.5, 50)
 metadata/area_id = "ford"
 
-[node name="Label_712" type="Label3D" parent="."]
+[node name="Label_724" type="Label3D" parent="."]
 position = Vector3(15, 4, -20)
 text = "BRIDGE"
 font_size = 40
@@ -9594,7 +9720,7 @@ modulate = Color(0.91, 0.83, 0.64, 1)
 position = Vector3(15, 0.5, -20)
 metadata/area_id = "bridge"
 
-[node name="Label_713" type="Label3D" parent="."]
+[node name="Label_725" type="Label3D" parent="."]
 position = Vector3(0, 4, -75)
 text = "VILLAGE"
 font_size = 40
@@ -9606,7 +9732,7 @@ modulate = Color(0.91, 0.83, 0.64, 1)
 position = Vector3(0, 0.5, -75)
 metadata/area_id = "village"
 
-[node name="Label_714" type="Label3D" parent="."]
+[node name="Label_726" type="Label3D" parent="."]
 position = Vector3(75, 4, -80)
 text = "CHAPEL"
 font_size = 40
@@ -9618,7 +9744,7 @@ modulate = Color(0.91, 0.83, 0.64, 1)
 position = Vector3(75, 0.5, -80)
 metadata/area_id = "chapel"
 
-[node name="Label_715" type="Label3D" parent="."]
+[node name="Label_727" type="Label3D" parent="."]
 position = Vector3(85, 4, -30)
 text = "FORECOURT"
 font_size = 40
@@ -9630,7 +9756,7 @@ modulate = Color(0.91, 0.83, 0.64, 1)
 position = Vector3(85, 0.5, -30)
 metadata/area_id = "forecourt"
 
-[node name="Label_716" type="Label3D" parent="."]
+[node name="Label_728" type="Label3D" parent="."]
 position = Vector3(105, 4, 8)
 text = "CRYPT ENTRY"
 font_size = 40
@@ -9642,7 +9768,7 @@ modulate = Color(0.91, 0.83, 0.64, 1)
 position = Vector3(105, 0.5, 8)
 metadata/area_id = "crypt_entry"
 
-[node name="Label_717" type="Label3D" parent="."]
+[node name="Label_729" type="Label3D" parent="."]
 position = Vector3(105, 4, 38)
 text = "GALLERIES"
 font_size = 40
@@ -9654,7 +9780,7 @@ modulate = Color(0.91, 0.83, 0.64, 1)
 position = Vector3(105, 0.5, 38)
 metadata/area_id = "galleries"
 
-[node name="Label_718" type="Label3D" parent="."]
+[node name="Label_730" type="Label3D" parent="."]
 position = Vector3(80, 4, 68)
 text = "OSSUARY"
 font_size = 40
@@ -9666,7 +9792,7 @@ modulate = Color(0.91, 0.83, 0.64, 1)
 position = Vector3(80, 0.5, 68)
 metadata/area_id = "ossuary"
 
-[node name="Label_719" type="Label3D" parent="."]
+[node name="Label_731" type="Label3D" parent="."]
 position = Vector3(130, 4, 68)
 text = "ARMORY"
 font_size = 40
@@ -9678,7 +9804,7 @@ modulate = Color(0.91, 0.83, 0.64, 1)
 position = Vector3(130, 0.5, 68)
 metadata/area_id = "armory"
 
-[node name="Label_720" type="Label3D" parent="."]
+[node name="Label_732" type="Label3D" parent="."]
 position = Vector3(105, 4, 95)
 text = "ANTECHAMBER"
 font_size = 40
@@ -9690,7 +9816,7 @@ modulate = Color(0.91, 0.83, 0.64, 1)
 position = Vector3(105, 0.5, 95)
 metadata/area_id = "antechamber"
 
-[node name="Label_721" type="Label3D" parent="."]
+[node name="Label_733" type="Label3D" parent="."]
 position = Vector3(105, 4, 125)
 text = "GUARDIAN"
 font_size = 40
@@ -9702,7 +9828,7 @@ modulate = Color(0.91, 0.83, 0.64, 1)
 position = Vector3(105, 0.5, 125)
 metadata/area_id = "guardian"
 
-[node name="Label_722" type="Label3D" parent="."]
+[node name="Label_734" type="Label3D" parent="."]
 position = Vector3(-50, 4, -145)
 text = "NORTH PASS"
 font_size = 40
@@ -9714,7 +9840,7 @@ modulate = Color(0.91, 0.83, 0.64, 1)
 position = Vector3(-50, 0.5, -145)
 metadata/area_id = "north_pass"
 
-[node name="Label_723" type="Label3D" parent="."]
+[node name="Label_735" type="Label3D" parent="."]
 position = Vector3(175, 4, -65)
 text = "EASTERN GROVE"
 font_size = 40
@@ -9726,7 +9852,7 @@ modulate = Color(0.91, 0.83, 0.64, 1)
 position = Vector3(175, 0.5, -65)
 metadata/area_id = "eastern_grove"
 
-[node name="Label_724" type="Label3D" parent="."]
+[node name="Label_736" type="Label3D" parent="."]
 position = Vector3(-175, 4, -45)
 text = "OLD QUARRY"
 font_size = 40
@@ -9738,7 +9864,7 @@ modulate = Color(0.91, 0.83, 0.64, 1)
 position = Vector3(-175, 0.5, -45)
 metadata/area_id = "old_quarry"
 
-[node name="Label_725" type="Label3D" parent="."]
+[node name="Label_737" type="Label3D" parent="."]
 position = Vector3(-85, 4, 165)
 text = "SOUTHERN COPSE"
 font_size = 40

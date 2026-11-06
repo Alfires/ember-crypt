@@ -6,6 +6,29 @@ updated Comunicare safe loader/runtime. The complete roguelike is not finished.
 
 ## Build and open in Comunicare
 
+### Play the relic expedition (0.4.0)
+
+Use any leveling lectern and choose **Start / restart relic run**. Locate the
+brass relic plinths at the **watchtower, village and forecourt**, interact with
+each, then visit the **crypt altar in the guardian hall**. The Objectives page
+shows saved seal flags, 25 XP per seal and completed runs. The altar requires all
+three seals and grants a completion only once. Restart clears seals/run XP but
+keeps the completed-run count. This runs as declarative `.worldscript` data inside
+Comunicare; no preview GDScript or player is included.
+
+This is a first **exploration loop**, not enemy combat or the planned leveling
+system. Its objective state is intentionally saved so the expedition can resume
+within the same player/package namespace. No guardian fight, physical locked door,
+failure/death state, cosmetic rewards or upgrade spending is claimed. The altar
+checks eligibility; it does not physically seal the crypt hallway. New runs can
+earn relic XP again, but this XP currently has no permanent reward or spending.
+
+The client limits disk saves to one write/second. An immediate second interaction
+can be rejected without applying partial rewards; wait a second and interact again.
+The client UI does not yet surface that rejection clearly. Starting a run is
+explicitly labeled as restarting current objectives, without a confirmation dialog.
+Loop tests exercise real disk-store timing instead of bypassing its limiter.
+
 ```sh
 python3 tools/package_world.py
 python3 tests/run_package.py --comunicare /path/to/comunicare
@@ -18,9 +41,11 @@ project.godot, GLTF binaries or import caches**. Do not ZIP the authoring reposi
 as a substitute. The output is ignored by Git and rebuilt locally.
 
 The supported package slice includes the full static map/scanned model conversion,
-spawn, four station menus, creator Credits/license text, shared run-state notes and
-a saved map-note action through **Comunicare's player/world-scoped storage.local**.
-It does not yet port author-preview exploration XP/upgrade logic. Menu pages label
+spawn, four station menus, creator Credits/license text, shared run-state notes,
+the relic expedition and a saved map-note action through
+**Comunicare's player/world-scoped storage.local**.
+The relic expedition is separate from the author-preview discovery XP/upgrade logic,
+which is not ported. Menu pages label
 unfinished gameplay honestly rather than claiming their descriptions implement it.
 Opening a page never awards XP. Save-note success is verified by integration tests;
 the current package UI does not yet show detailed write failure/retry status.
@@ -37,9 +62,16 @@ quality, foliage transparency and mesh-chunk draw-call cost need rendered review
 The production-loader fixture copies the chosen Comunicare world services into a
 disposable project with isolated HOME/XDG data. It checks the actual archive,
 client menu button actions, shared state, storage reopening and script stop cleanup.
-Current result: **3,846 checks pass** (mostly per-node no-script checks), not 3,846
+Recorded result: **3,866 package checks plus 23 loop checks pass** (mostly per-node no-script checks), not 3,866
 independent gameplay scenarios. Includes exported route clearance, twelve rigid
 pickup bodies and settling physics, foliage cutout settings and geometry sharing.
+Publication note: the final export rebuilt successfully and four Python objective
+tests pass. The latest added in-progress resume checks have not yet been run in
+Godot. The new physical-interaction fixture timed out and remains unverified;
+`--suite interaction` isolates it for diagnosis. It is not claimed as passing
+player targeting coverage. Result-only victory/locked pages are not offered as
+ordinary navigation destinations. The latest author tests pass 445 map checks,
+41 progression and 56 menu checks, plus five Python landscape tests.
 All 29 routes also undergo a swept 0.35 m-radius, 1.8 m-high capsule check. This
 found a shrine lectern and supply case encroaching on routes; deterministic
 route-aware prop placement now keeps them clear. Capsule sweeps use a lifted
@@ -204,7 +236,7 @@ primitive collision in the safe export; author preview collision is not yet
 equivalent. Labels are authoring wayfinding rather than final in-world signage.
 
 The crypt is currently roofed at surface level, not excavated below terrain.
-Enemy AI/combat, guardian, objective gates, seeded encounters, healing, combat XP,
+Enemy AI/combat, guardian fights, physical objective gates, seeded encounters, healing, combat XP,
 animations and shortcuts are **not implemented**. Author-only exploration XP,
 local progression and run upgrade selection work in the local tooling, not yet in
 the Comunicare package; calculated stats do not affect combat. Package menus use
