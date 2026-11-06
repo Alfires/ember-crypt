@@ -37,7 +37,7 @@ quality, foliage transparency and mesh-chunk draw-call cost need rendered review
 The production-loader fixture copies the chosen Comunicare world services into a
 disposable project with isolated HOME/XDG data. It checks the actual archive,
 client menu button actions, shared state, storage reopening and script stop cleanup.
-Current result: **1,732 checks pass** (mostly per-node no-script checks), not 1,732
+Current result: **1,899 checks pass** (mostly per-node no-script checks), not 1,899
 independent gameplay scenarios. Includes exported route clearance, twelve rigid
 pickup bodies and settling physics, foliage cutout settings and geometry sharing.
 It is not a full application/headset test: actual
@@ -85,6 +85,12 @@ The standalone save is not account-scoped or the Comunicare storage API.
 - **115 tree placements and 75 scanned rock clusters**, rounded horizon foothills,
   camp/ruin tables, benches and route-safe supply crates. Safe export selects one
   scanned tree variant per placement rather than importing the full catalogue.
+- **18,470 bent grass blades in 55 irregular static patches**, with varied height,
+  lean and orientation. Placement excludes route verges, buildings, water and
+  interaction clearings. Original generated geometry is under `assets/vegetation/`
+  and credited in the world menu; no third-party grass license is implied.
+  Geometry is static: no wind shader, animation or collision. This is an initial
+  grass pass, not photorealistic vegetation or full terrain art completion.
 - **12 pickup supply cases** distributed through camp, ruins and crypt. They export
   as real RigidBody3Ds with attached geometry/collision for Comunicare carrying;
   they do not grant healing, inventory items or XP. Actual client grip testing is
@@ -126,8 +132,8 @@ python3 tests/run.py
 Uses an isolated project/HOME/XDG copy under `/tmp/opencode`, imports assets,
 runs real Godot collision queries, progression/storage rules, actual station button
 actions and the desktop preview smoke test. Set
-`GODOT=/path/to/godot` if necessary. Current result: **421 map + 41 progression +
-56 menu assertions, zero failures**;
+`GODOT=/path/to/godot` if necessary. Current result: **423 map + 41 progression +
+56 menu assertions and four Python landscape tests, zero failures**;
 **28 asset-file SHA-256 hashes verified**. Return codes: 0 pass, 1 assertion failure,
 2 infrastructure/engine errors. No real account, relay, microphone or XR is used.
 Route tests check centerline obstructions and sampled ground, not full capsule
@@ -154,18 +160,18 @@ For real rendered package review (requires an available graphical display):
 python3 tests/run_package.py --comunicare /path/to/comunicare --render
 ```
 
-Captures camp, field, woodland and overview under `build/review/` using the actual
+Captures grass close-up, camp, field, woodland and overview under `build/review/` using the actual
 safe loader. A Compatibility/Intel UHD 630 capture completed; the graphics stack
 also printed NVIDIA driver-selection warnings. This is not a performance or
 headset certification. A denser experimental foliage configuration timed out and
-was replaced with the lower-geometry tested configuration. The final export uses
-62 shared meshes, 22,328 unique vertices and 68,718 indices; repeated instances
+was replaced with the lower-geometry tested configuration. The current grass export uses
+117 meshes, 114,678 vertices and 234,948 indices; repeated instances
 still incur rendering cost. No final-quality art approval is implied by screenshots.
 
 This is a first map implementation, **not final high-quality art sign-off**.
 The detailed scanned nature assets/PBR materials are present, but buildings are
-original modular masonry shells; the meadow uses a grass surface, not yet dense
-blade vegetation or sculpted terrain. Trees/rocks are decorative without individual
+original modular masonry shells; the meadow now has blade patches but still needs
+more convincing ground variation and sculpted terrain. Trees/rocks are decorative without individual
 collision. Labels are authoring wayfinding rather than final in-world signage.
 
 The crypt is currently roofed at surface level, not excavated below terrain.

@@ -7,11 +7,15 @@ from pathlib import Path
 import shutil
 import subprocess
 import tempfile
+import sys
 
 ROOT = Path(__file__).resolve().parents[1]
 
 
 def main():
+    landscape = subprocess.run([sys.executable, str(ROOT / "tests/test_landscape.py")], timeout=60)
+    if landscape.returncode:
+        return 1
     inventory = json.loads((ROOT / "assets/provenance.json").read_text())
     count = 0
     for asset in inventory["assets"]:

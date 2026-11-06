@@ -78,10 +78,17 @@ class Scene:
 
 
 def build():
+    from grass import write_assets
     RNG.seed(83742)
     s = Scene()
     ext = ['[ext_resource type="PackedScene" path="res://scenes/preview.tscn" id="preview"]']
     ext += [f'[ext_resource type="PackedScene" path="res://assets/models/{name}/{name}_1k.gltf" id="{name}"]' for name in ("pine_sapling_small", "boulder_01")]
+    grass_patches = write_assets()
+    grass_material = s.resource("StandardMaterial3D", 'albedo_color = Color(0.25, 0.34, 0.12, 1)\nroughness = 1.0\ncull_mode = 2')
+    for index, patch in enumerate(grass_patches):
+        ext.append(f'[ext_resource type="ArrayMesh" path="res://assets/vegetation/patch_{index:02d}.obj" id="grass{index}"]')
+        x, z = patch["center"]
+        s.node(f"GrassPatch_{index:02d}", "MeshInstance3D", properties=f'position = Vector3({x}, 0, {z})\nmesh = ExtResource("grass{index}")\nmaterial_override = {grass_material}')
     materials = {}
     for name in ("sparse_grass", "rock_01", "forest_floor", "rock_path", "weathered_planks"):
         for channel in ("diff", "nor_gl", "rough"):
@@ -248,7 +255,7 @@ def build():
     s.nodes.append('[node name="Preview" parent="." instance=ExtResource("preview")]\n')
     text = '[gd_scene format=3]\n\n' + '\n'.join(ext + s.resources) + '\n[node name="AshenVale" type="Node3D"]\n\n' + '\n'.join(s.nodes)
     (ROOT / "scenes/world.tscn").write_text(text)
-    (ROOT / "map.json").write_text(json.dumps({"areas": AREAS, "routes": EDGES, "stations": STATIONS, "spawn": "camp", "exit": "guardian", "size_m": [440,370], "trees": len(tree_positions), "rocks": len(rock_positions), "pickup_items": 12}, indent=2) + '\n')
+    (ROOT / "map.json").write_text(json.dumps({"areas": AREAS, "routes": EDGES, "stations": STATIONS, "spawn": "camp", "exit": "guardian", "size_m": [440,370], "trees": len(tree_positions), "rocks": len(rock_positions), "pickup_items": 12, "grass_patches": len(grass_patches), "grass_blades": sum(len(p["blades"]) for p in grass_patches)}, indent=2) + '\n')
     print(f"Built {len(AREAS)} areas, {len(EDGES)} routes, {len(s.nodes)} scene nodes")
 
 

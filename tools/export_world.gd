@@ -82,7 +82,8 @@ func mesh_ref(mesh: Mesh, surface: int) -> Array:
 	# This is a detailed scan with baked maps, not a faceted low-poly replacement.
 	var source_material = mesh.surface_get_material(surface)
 	var foliage = source_material != null and source_material.resource_name.contains("pine_sapling_small_twig")
-	var target_indices = 90000 if foliage else 45000
+	var grass_surface = mesh.resource_path.contains("vegetation/")
+	var target_indices = 1000000 if grass_surface else 90000 if foliage else 45000
 	if chosen.size() > target_indices:
 		var importer = ImporterMesh.new()
 		importer.add_surface(Mesh.PRIMITIVE_TRIANGLES, arrays)

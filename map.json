@@ -221,5 +221,7 @@
   ],
   "trees": 115,
   "rocks": 75,
-  "pickup_items": 12
+  "pickup_items": 12,
+  "grass_patches": 55,
+  "grass_blades": 18470
 }

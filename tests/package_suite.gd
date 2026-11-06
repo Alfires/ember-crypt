@@ -38,7 +38,15 @@ func run():
 				sky_materials += 1
 	check(alpha_materials > 0, "export retains actual alpha-scissor enum instead of alpha-prepass")
 	check(sky_materials > 0, "static sky material survives safe conversion")
-	check(result.document.meshes.size() < 150, "repeated map instances share exported geometry")
+	check(result.document.meshes.size() < 350, "repeated map instances share exported geometry")
+	var grass_surfaces = 0
+	for node in world.find_children("*", "MeshInstance3D", true, false):
+		var material = node.material_override
+		if material is StandardMaterial3D and material.albedo_color.is_equal_approx(Color(0.25, 0.34, 0.12, 1)):
+			grass_surfaces += 1
+			check(material.cull_mode == BaseMaterial3D.CULL_DISABLED, "grass blades remain visible from both sides")
+			check(node.find_children("*", "CollisionShape3D", true, false).is_empty(), "grass adds no movement collision")
+	check(grass_surfaces >= 35, "real grass mesh patches survive Comunicare safe loader")
 	var pickups = []
 	for id in result.document.entities:
 		var entry = result.document.entities[id]
@@ -57,6 +65,7 @@ func run():
 	var map = JSON.parse_string(archive.read_file("map.json").get_string_from_utf8())
 	archive.close()
 	check(int(map.size_m[0]) == 440 and int(map.size_m[1]) == 370 and map.trees >= 100 and map.rocks >= 65, "expanded scenery counts recorded in actual package")
+	check(map.grass_blades > 12000 and map.grass_patches == grass_surfaces, "grass density metadata matches real package geometry")
 	var physics = world.get_world_3d().direct_space_state
 	for edge in map.routes:
 		var a = map.areas[edge[0]]

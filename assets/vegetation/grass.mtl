@@ -1,0 +1,14 @@
+newmtl grass0
+Kd 0.18 0.27 0.08
+Ks 0 0 0
+Ns 1
+
+newmtl grass1
+Kd 0.27 0.34 0.12
+Ks 0 0 0
+Ns 1
+
+newmtl grass2
+Kd 0.38 0.37 0.17
+Ks 0 0 0
+Ns 1

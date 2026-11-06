@@ -15,6 +15,7 @@ func run():
 	camera.far = 800
 	world.add_child(camera)
 	var shots = [
+		["grass_detail", Vector3(-23, 1.7, 57), Vector3(-13, 0.3, 43)],
 		["camp", Vector3(-12, 8, 110), Vector3(0, 1, 80)],
 		["field", Vector3(35, 14, 65), Vector3(-15, 1, -20)],
 		["woodland", Vector3(-125, 12, 10), Vector3(-95, 2, -35)],
