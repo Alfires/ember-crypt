@@ -47,6 +47,7 @@ func material_ref(material: Material) -> String:
 	properties.append("albedo_color = Color(%s, %s, %s, %s)" % [color.r, color.g, color.b, color.a])
 	properties.append("roughness = " + str(material.roughness))
 	properties.append("metallic = " + str(material.metallic))
+	properties.append("shading_mode = " + str(material.shading_mode))
 	# Texture declarations belong to each material resource namespace.
 	for channel in ["albedo", "normal", "roughness", "metallic", "ao"]:
 		var texture = material.get(channel + "_texture")
@@ -56,9 +57,11 @@ func material_ref(material: Material) -> String:
 		for declaration in resources:
 			if declaration.ends_with('id="' + tex_id + '"]') and not declaration in declarations: declarations.append(declaration)
 		properties.append(channel + "_texture = " + ref)
+		if channel in ["roughness", "metallic", "ao"]:
+			properties.append(channel + "_texture_channel = " + str(material.get(channel + "_texture_channel")))
 		if channel in ["normal", "ao"]: properties.append(channel + "_enabled = true")
 	if material.transparency == BaseMaterial3D.TRANSPARENCY_ALPHA_SCISSOR:
-		properties.append("transparency = 2")
+		properties.append("transparency = " + str(BaseMaterial3D.TRANSPARENCY_ALPHA_SCISSOR))
 		properties.append("alpha_scissor_threshold = " + str(material.alpha_scissor_threshold))
 	properties.append("cull_mode = " + str(material.cull_mode))
 	write_text(path, '[gd_resource type="StandardMaterial3D" format=3]\n' + "\n".join(declarations) + '\n[resource]\n' + "\n".join(properties) + "\n")
@@ -77,20 +80,23 @@ func mesh_ref(mesh: Mesh, surface: int) -> Array:
 		for index in arrays[Mesh.ARRAY_VERTEX].size(): chosen.append(index)
 	# Reduce overly dense scanned source surfaces using the engine's author-side LODs.
 	# This is a detailed scan with baked maps, not a faceted low-poly replacement.
-	if chosen.size() > 45000:
+	var source_material = mesh.surface_get_material(surface)
+	var foliage = source_material != null and source_material.resource_name.contains("pine_sapling_small_twig")
+	var target_indices = 90000 if foliage else 45000
+	if chosen.size() > target_indices:
 		var importer = ImporterMesh.new()
 		importer.add_surface(Mesh.PRIMITIVE_TRIANGLES, arrays)
 		importer.generate_lods(60, 60, [])
 		for lod in importer.get_surface_lod_count(0):
 			var candidate = importer.get_surface_lod_indices(0, lod)
-			if candidate.size() <= 45000:
+			if candidate.size() <= target_indices:
 				chosen = candidate
 				break
 	var refs: Array = []
 	# Small independent surfaces fit the parser's per-document fuel budget.
 	# Partition triangles, rather than further reducing visible scan detail.
-	for offset in range(0, chosen.size(), 3000):
-		refs.append(write_mesh_chunk(mesh, arrays, chosen.slice(offset, offset + 3000)))
+	for offset in range(0, chosen.size(), 9000):
+		refs.append(write_mesh_chunk(mesh, arrays, chosen.slice(offset, offset + 9000)))
 	mesh_cache[key] = refs
 	return refs
 
@@ -128,22 +134,38 @@ func transform_text(value: Transform3D) -> String:
 	var o = value.origin
 	return "Transform3D(%s, %s, %s, %s, %s, %s, %s, %s, %s, %s, %s, %s)" % [b.x.x,b.x.y,b.x.z,b.y.x,b.y.y,b.y.z,b.z.x,b.z.y,b.z.z,o.x,o.y,o.z]
 
-func visit(node: Node, transform: Transform3D = Transform3D.IDENTITY):
+func visit(node: Node, transform: Transform3D = Transform3D.IDENTITY, body_parent: String = "", body_transform: Transform3D = Transform3D.IDENTITY):
+	# The publisher scene is a three-variant catalogue, not one tree. Use a single
+	# tree per placement and spend geometry on needles instead of three trunks.
+	if str(node.name) in ["pine_sapling_small_b", "pine_sapling_small_c"]: return
 	if node is Node3D: transform = transform * node.transform
+	if node is RigidBody3D and node.get_meta("world_pickup", false):
+		var id = str(node.get_meta("world_entity_id"))
+		body_parent = str(node.name)
+		body_transform = transform
+		nodes.append('[node name="%s" type="RigidBody3D" parent="."]\ntransform = %s\nmass = %s\nmetadata/world_entity_id = "%s"\nmetadata/world_pickup = true' % [body_parent, transform_text(transform), node.mass, id])
 	if node is MeshInstance3D and node.mesh != null:
+		if not node.visible:
+			for child in node.get_children(): visit(child, transform, body_parent, body_transform)
+			return
 		for surface in node.mesh.get_surface_count():
 			var refs = mesh_ref(node.mesh, surface)
 			var material = node.material_override if node.material_override != null else node.mesh.surface_get_material(surface)
 			var mat = material_ref(material)
 			for ref in refs:
-				nodes.append('[node name="Visual%s" type="MeshInstance3D" parent="."]\ntransform = %s\nmesh = %s\n%s' % [nodes.size(), transform_text(transform), ref, "material_override = " + mat if not mat.is_empty() else ""])
+				var parent = body_parent if not body_parent.is_empty() else "."
+				var local = body_transform.affine_inverse() * transform if not body_parent.is_empty() else transform
+				nodes.append('[node name="Visual%s" type="MeshInstance3D" parent="%s"]\ntransform = %s\nmesh = %s\n%s' % [nodes.size(), parent, transform_text(local), ref, "material_override = " + mat if not mat.is_empty() else ""])
 	elif node is CollisionShape3D and node.shape is BoxShape3D:
 		var id = "shape" + str(nodes.size())
 		var size = node.shape.size
 		resources.append('[sub_resource type="BoxShape3D" id="%s"]\nsize = Vector3(%s, %s, %s)' % [id, size.x, size.y, size.z])
-		var name = "Body" + str(nodes.size())
-		nodes.append('[node name="%s" type="StaticBody3D" parent="."]\ntransform = %s' % [name, transform_text(transform)])
-		nodes.append('[node name="Shape" type="CollisionShape3D" parent="%s"]\nshape = SubResource("%s")' % [name, id])
+		if not body_parent.is_empty():
+			nodes.append('[node name="Shape" type="CollisionShape3D" parent="%s"]\ntransform = %s\nshape = SubResource("%s")' % [body_parent, transform_text(body_transform.affine_inverse() * transform), id])
+		else:
+			var name = "Body" + str(nodes.size())
+			nodes.append('[node name="%s" type="StaticBody3D" parent="."]\ntransform = %s' % [name, transform_text(transform)])
+			nodes.append('[node name="Shape" type="CollisionShape3D" parent="%s"]\nshape = SubResource("%s")' % [name, id])
 	elif node is DirectionalLight3D or node is OmniLight3D:
 		var color = node.light_color
 		var extra = "\nomni_range = " + str(node.omni_range) if node is OmniLight3D else ""
@@ -153,7 +175,7 @@ func visit(node: Node, transform: Transform3D = Transform3D.IDENTITY):
 	elif node.name.begins_with("Station_"):
 		var id = str(node.name).trim_prefix("Station_")
 		nodes.append('[node name="%s" type="Node3D" parent="."]\ntransform = %s\nmetadata/world_entity_id = "%s"\nmetadata/world_script = "logic/%s.worldscript"' % [node.name, transform_text(transform), id, id])
-	for child in node.get_children(): visit(child, transform)
+	for child in node.get_children(): visit(child, transform, body_parent, body_transform)
 
 func _initialize(): call_deferred("run")
 

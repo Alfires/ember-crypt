@@ -29,15 +29,18 @@ Export flattens source instances and converts texture maps to PNG and static
 geometry to bounded `.worldmesh` chunks. Triplanar projection is baked into UVs.
 Dense scans use author-side engine LOD reduction, then triangle partitioning to
 fit parser fuel limits. No client validators or sibling files are modified.
-Environment sky/fog, shadow settings, author labels and preview scripts are not
-exported; visual parity with the editor is **not** claimed. Tangent/normal-map
+Environment fog, shadow settings, author labels and preview scripts are not
+exported; a reviewed static sky dome replaces the unsupported environment sky.
+Visual parity with the editor is **not** claimed. Tangent/normal-map
 quality, foliage transparency and mesh-chunk draw-call cost need rendered review.
 
 The production-loader fixture copies the chosen Comunicare world services into a
 disposable project with isolated HOME/XDG data. It checks the actual archive,
 client menu button actions, shared state, storage reopening and script stop cleanup.
-Current result: **2,293 checks pass** (mostly per-node no-script checks), not 2,293
-independent gameplay scenarios. It is not a full application/headset test: actual
+Current result: **1,732 checks pass** (mostly per-node no-script checks), not 1,732
+independent gameplay scenarios. Includes exported route clearance, twelve rigid
+pickup bodies and settling physics, foliage cutout settings and geometry sharing.
+It is not a full application/headset test: actual
 player input targeting, DataLoader transitions and client UI navigation remain
 manual/integration gates. No relay, real account, microphone or headset is started.
 The code must include `ui.local`, `state.local`, `world_menu.gd` and UI schema
@@ -76,8 +79,16 @@ The standalone save is not account-scoped or the Comunicare storage API.
 
 ## Built map
 
-- 300 × 270 m bounded landscape, broad playable meadow, stream/bridge and trails.
-- 18 named areas, 21 connected authored routes, western and eastern exploration loops.
+- **440 × 370 m** landscape, broad playable meadow, stream/bridge and aligned trails.
+- **22 named areas, 29 connected routes**, including North pass, Old quarry,
+  Eastern grove and Southern copse; western/eastern exploration loops.
+- **115 tree placements and 75 scanned rock clusters**, rounded horizon foothills,
+  camp/ruin tables, benches and route-safe supply crates. Safe export selects one
+  scanned tree variant per placement rather than importing the full catalogue.
+- **12 pickup supply cases** distributed through camp, ruins and crypt. They export
+  as real RigidBody3Ds with attached geometry/collision for Comunicare carrying;
+  they do not grant healing, inventory items or XP. Actual client grip testing is
+  still required; isolated tests verify export structure and real settling physics.
 - Farm/village ruins, woodland/watchtower, chapel refuge and a roofed crypt wing
   with galleries, ossuary, armory, antechamber and guardian hall.
 - Original composition using detailed CC0 scanned Poly Haven trees/boulders and
@@ -115,7 +126,7 @@ python3 tests/run.py
 Uses an isolated project/HOME/XDG copy under `/tmp/opencode`, imports assets,
 runs real Godot collision queries, progression/storage rules, actual station button
 actions and the desktop preview smoke test. Set
-`GODOT=/path/to/godot` if necessary. Current result: **320 map + 41 progression +
+`GODOT=/path/to/godot` if necessary. Current result: **421 map + 41 progression +
 56 menu assertions, zero failures**;
 **28 asset-file SHA-256 hashes verified**. Return codes: 0 pass, 1 assertion failure,
 2 infrastructure/engine errors. No real account, relay, microphone or XR is used.
@@ -136,6 +147,20 @@ is in `assets/licenses/CC0-1.0.txt`. CC0 applies to those assets, not automatica
 to original project code. No repository-wide code license has been selected.
 
 ## Explicit unfinished work
+
+For real rendered package review (requires an available graphical display):
+
+```sh
+python3 tests/run_package.py --comunicare /path/to/comunicare --render
+```
+
+Captures camp, field, woodland and overview under `build/review/` using the actual
+safe loader. A Compatibility/Intel UHD 630 capture completed; the graphics stack
+also printed NVIDIA driver-selection warnings. This is not a performance or
+headset certification. A denser experimental foliage configuration timed out and
+was replaced with the lower-geometry tested configuration. The final export uses
+62 shared meshes, 22,328 unique vertices and 68,718 indices; repeated instances
+still incur rendering cost. No final-quality art approval is implied by screenshots.
 
 This is a first map implementation, **not final high-quality art sign-off**.
 The detailed scanned nature assets/PBR materials are present, but buildings are

@@ -15,6 +15,7 @@ def main():
     parser = argparse.ArgumentParser(description=__doc__)
     parser.add_argument("--comunicare", type=Path, required=True)
     parser.add_argument("--package", type=Path, default=ROOT / "build/ember-crypt.cworld")
+    parser.add_argument("--render", action="store_true", help="Also capture real package views using the available display")
     args = parser.parse_args()
     with zipfile.ZipFile(args.package) as archive:
         forbidden = [name for name in archive.namelist() if name.endswith((".gd", ".gltf", ".glb", ".bin", ".jpg", ".import")) or name in ("project.godot",)]
@@ -29,6 +30,7 @@ def main():
         # not exercised and this does not run application startup/autoloads.
         shutil.copytree(args.comunicare / "scenes/GUI", project / "scenes/GUI")
         shutil.copy2(ROOT / "tests/package_suite.gd", project / "suite.gd")
+        shutil.copy2(ROOT / "tests/render_package.gd", project / "render.gd")
         shutil.copy2(args.package, project / "ember-crypt.cworld")
         (project / "project.godot").write_text('config_version=5\n[application]\nconfig/name="Ember Comunicare integration"\n[rendering]\nrenderer/rendering_method="gl_compatibility"\n')
         env = os.environ.copy()
@@ -44,6 +46,13 @@ def main():
             if "ERROR:" in output or result.returncode not in (0, 1): return 2
             if result.returncode: return 1
             if "Comunicare package:" not in output: return 2
+        if args.render:
+            target = ROOT / "build/review"
+            target.mkdir(parents=True, exist_ok=True)
+            result = subprocess.run([os.environ.get("GODOT", "godot"), "--path", str(project), "--script", "res://render.gd", "--", str(target)], env=env, capture_output=True, text=True, timeout=180)
+            output = result.stdout + result.stderr
+            print(output)
+            if "ERROR:" in output or result.returncode: return 2
     return 0
 
 

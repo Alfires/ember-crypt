@@ -71,6 +71,22 @@
     "guardian": [
       105,
       125
+    ],
+    "north_pass": [
+      -50,
+      -145
+    ],
+    "eastern_grove": [
+      175,
+      -65
+    ],
+    "old_quarry": [
+      -175,
+      -45
+    ],
+    "southern_copse": [
+      -85,
+      165
     ]
   },
   "routes": [
@@ -157,6 +173,38 @@
     [
       "antechamber",
       "guardian"
+    ],
+    [
+      "watchtower",
+      "north_pass"
+    ],
+    [
+      "north_pass",
+      "village"
+    ],
+    [
+      "chapel",
+      "eastern_grove"
+    ],
+    [
+      "eastern_grove",
+      "forecourt"
+    ],
+    [
+      "woodland",
+      "old_quarry"
+    ],
+    [
+      "old_quarry",
+      "shrine"
+    ],
+    [
+      "farm",
+      "southern_copse"
+    ],
+    [
+      "southern_copse",
+      "camp"
     ]
   ],
   "stations": [
@@ -166,5 +214,12 @@
     "crypt_entry"
   ],
   "spawn": "camp",
-  "exit": "guardian"
+  "exit": "guardian",
+  "size_m": [
+    440,
+    370
+  ],
+  "trees": 115,
+  "rocks": 75,
+  "pickup_items": 12
 }

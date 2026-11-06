@@ -14,6 +14,8 @@ AREAS = {
     "village": [0, -75], "chapel": [75, -80], "forecourt": [85, -30],
     "crypt_entry": [105, 8], "galleries": [105, 38], "ossuary": [80, 68],
     "armory": [130, 68], "antechamber": [105, 95], "guardian": [105, 125],
+    "north_pass": [-50, -145], "eastern_grove": [175, -65],
+    "old_quarry": [-175, -45], "southern_copse": [-85, 165],
 }
 EDGES = [
     ("camp", "south_road"), ("south_road", "field"), ("south_road", "farm"),
@@ -23,6 +25,10 @@ EDGES = [
     ("chapel", "forecourt"), ("bridge", "forecourt"), ("forecourt", "crypt_entry"),
     ("crypt_entry", "galleries"), ("galleries", "ossuary"), ("galleries", "armory"),
     ("ossuary", "antechamber"), ("armory", "antechamber"), ("antechamber", "guardian"),
+    ("watchtower", "north_pass"), ("north_pass", "village"),
+    ("chapel", "eastern_grove"), ("eastern_grove", "forecourt"),
+    ("woodland", "old_quarry"), ("old_quarry", "shrine"),
+    ("farm", "southern_copse"), ("southern_copse", "camp"),
 ]
 STATIONS = ["camp", "shrine", "chapel", "crypt_entry"]
 
@@ -32,11 +38,17 @@ class Scene:
         self.resources = []
         self.nodes = []
         self.counter = 0
+        self.shared_resources = {}
 
     def resource(self, kind, properties):
+        signature = (kind, properties)
+        if signature in self.shared_resources:
+            return self.shared_resources[signature]
         key = f"r{len(self.resources)}"
         self.resources.append(f'[sub_resource type="{kind}" id="{key}"]\n{properties}\n')
-        return f'SubResource("{key}")'
+        reference = f'SubResource("{key}")'
+        self.shared_resources[signature] = reference
+        return reference
 
     def node(self, name, kind, parent=".", properties="", groups=None):
         extra = f' groups={json.dumps(groups)}' if groups else ""
@@ -47,6 +59,8 @@ class Scene:
         name = f"{name}_{self.counter}"
         mesh = self.resource("BoxMesh", f"size = Vector3{tuple(size)}")
         self.node(name, "MeshInstance3D", parent, f"position = Vector3{tuple(xyz)}\nmesh = {mesh}\nmaterial_override = {material}")
+        if name.startswith("Boundary"):
+            self.nodes[-1] += "visible = false\n"
         if collision:
             shape = self.resource("BoxShape3D", f"size = Vector3{tuple(size)}")
             path = name if parent == "." else parent + "/" + name
@@ -57,8 +71,14 @@ class Scene:
         self.counter += 1
         self.node(f"Label_{self.counter}", "Label3D", properties=f"position = Vector3{tuple(xyz)}\ntext = {json.dumps(text)}\nfont_size = {size}\npixel_size = 0.012\nbillboard = 1\nmodulate = Color(0.91, 0.83, 0.64, 1)")
 
+    def ellipsoid(self, name, xyz, scale, material):
+        self.counter += 1
+        mesh = self.resource("SphereMesh", "radius = 1.0\nheight = 2.0\nradial_segments = 40\nrings = 20")
+        self.node(f"{name}_{self.counter}", "MeshInstance3D", properties=f"position = Vector3{tuple(xyz)}\nscale = Vector3{tuple(scale)}\nmesh = {mesh}\nmaterial_override = {material}")
+
 
 def build():
+    RNG.seed(83742)
     s = Scene()
     ext = ['[ext_resource type="PackedScene" path="res://scenes/preview.tscn" id="preview"]']
     ext += [f'[ext_resource type="PackedScene" path="res://assets/models/{name}/{name}_1k.gltf" id="{name}"]' for name in ("pine_sapling_small", "boulder_01")]
@@ -78,24 +98,29 @@ def build():
     grass = materials["sparse_grass"]
     dark = s.resource("StandardMaterial3D", "albedo_color = Color(0.055, 0.075, 0.09, 1)\nroughness = 0.7")
     gold = s.resource("StandardMaterial3D", "albedo_color = Color(0.6, 0.32, 0.09, 1)\nmetallic = 0.6\nroughness = 0.4")
+    distant = s.resource("StandardMaterial3D", "albedo_color = Color(0.22, 0.31, 0.29, 1)\nroughness = 1.0")
+    sky_blue = s.resource("StandardMaterial3D", "albedo_color = Color(0.38, 0.58, 0.76, 1)\nshading_mode = 0\ncull_mode = 1")
+    # Reviewed static geometry supplies an actual sky in safe packages, whose
+    # loader cannot yet reconstruct WorldEnvironment/Sky resources.
+    s.ellipsoid("SkyDome", (0, 0, 0), (600, 600, 600), sky_blue)
     sky = s.resource("ProceduralSkyMaterial", "sky_top_color = Color(0.12, 0.22, 0.31, 1)\nsky_horizon_color = Color(0.63, 0.68, 0.69, 1)\nground_bottom_color = Color(0.13, 0.15, 0.14, 1)")
     sky_res = s.resource("Sky", f"sky_material = {sky}")
     environment = s.resource("Environment", f"background_mode = 2\nsky = {sky_res}\nambient_light_source = 3\nambient_light_color = Color(0.62, 0.7, 0.8, 1)\nambient_light_energy = 0.55\ntonemap_mode = 2\nfog_enabled = true\nfog_light_color = Color(0.36, 0.43, 0.46, 1)\nfog_density = 0.0015")
     s.node("Environment", "WorldEnvironment", properties=f"environment = {environment}")
-    s.node("Sun", "DirectionalLight3D", properties="rotation_degrees = Vector3(-42, -35, 0)\nlight_color = Color(1, 0.85, 0.65, 1)\nlight_energy = 1.5\nshadow_enabled = true\ndirectional_shadow_max_distance = 180.0")
+    s.node("Sun", "DirectionalLight3D", properties="rotation_degrees = Vector3(-48, -35, 0)\nlight_color = Color(1, 0.96, 0.87, 1)\nlight_energy = 1.3\nshadow_enabled = true\ndirectional_shadow_max_distance = 180.0")
+    s.node("SkyFill", "DirectionalLight3D", properties="rotation_degrees = Vector3(-60, 140, 0)\nlight_color = Color(0.65, 0.77, 1, 1)\nlight_energy = 0.65")
     s.node("Spawn", "Marker3D", properties='position = Vector3(0, 0.1, 95)\nmetadata/world_spawn = true\nmetadata/world_entity_id = "spawn"')
-    s.box("Landscape", (0, -0.6, 15), (300, 1.2, 270), grass)
+    s.box("Landscape", (0, -0.6, 15), (440, 1.2, 370), grass)
     # PBR paths follow the same authored graph used by navigation tests.
     for a, b in EDGES:
         ax, az = AREAS[a]
         bx, bz = AREAS[b]
         distance = math.hypot(bx-ax, bz-az)
-        count = max(1, int(distance / 3))
-        for step in range(count + 1):
-            t = step / count
-            s.box("Trail", (ax + (bx-ax)*t, 0.012, az + (bz-az)*t), (5, 0.024, 5), path, False)
+        # One aligned trail ribbon per segment avoids the sawtooth tile edges.
+        s.node(f"Route_{a}_{b}", "Node3D", properties=f"position = Vector3({(ax+bx)/2}, 0.012, {(az+bz)/2})\nrotation = Vector3(0, {math.atan2(bx-ax,bz-az)}, 0)")
+        s.box("Trail", (0,0,0), (4.2, 0.024, distance + 2), path, False, f"Route_{a}_{b}")
     # Real landmark geometry: buildings have door gaps rather than solid box walls.
-    def clear_wall(name, xyz, size):
+    def clear_wall(name, xyz, size, material=None):
         # Preserve every authored route through ruins, including diagonal links.
         # Omit a wall segment if its footprint intersects a 2 m route clearance.
         x, _, z = xyz
@@ -108,7 +133,8 @@ def build():
                 pz = az + (bz-az)*step/steps
                 if abs(px-x) < size[0]/2+1 and abs(pz-z) < size[2]/2+1:
                     return
-        s.box(name, xyz, size, stone)
+        s.box(name, xyz, size, material or stone)
+        return True
 
     def ruin(name, x, z, width=18, depth=16, height=4, roof=False):
         s.box(name + "Floor", (x, 0.1, z), (width, 0.2, depth), path)
@@ -148,6 +174,27 @@ def build():
         s.box("Lectern", (x, 0.65, z), (1.1, 1.3, 0.8), stone)
         s.box("Book", (x, 1.34, z), (0.9, 0.08, 0.65), gold, False)
         s.label("CREDITS" if name == "credits" else "LEVELING / MAP", (x, 2.2, z), 28)
+    # PBR prop groups give buildings a purpose, without cluttering travel lanes.
+    for area in ("camp", "farm", "village", "chapel", "forecourt", "galleries", "armory", "ossuary"):
+        ax, az = AREAS[area]
+        for index in range(5):
+            x, z = ax - 7 + index * 1.3, az + 5
+            if clear_wall("Crate", (x, 0.55, z), (1.05, 1.1, 1.05), wood):
+                s.box("CrateBand", (x, 0.6, z + 0.535), (1.1, 0.12, 0.04), gold, False)
+        # Benches and tables: original joinery using audited wood materials.
+        clear_wall("TableTop", (ax + 6, 0.95, az - 4), (2.4, 0.16, 1.2), wood)
+        for dx in (5.1, 6.9):
+            clear_wall("TableLeg", (ax + dx, 0.45, az - 4), (0.16, 0.9, 0.8), wood)
+        clear_wall("Bench", (ax + 6, 0.5, az - 5.5), (2.5, 0.3, 0.55), wood)
+    # Tangible world objects, not menu rewards. Existing client item transport
+    # owns desktop/VR carrying; no custom physics scripts are packaged.
+    for index, area in enumerate(("camp", "farm", "shrine", "watchtower", "village", "chapel", "forecourt", "crypt_entry", "galleries", "ossuary", "armory", "guardian")):
+        ax, az = AREAS[area]
+        name = f"Supply_{index:02d}"
+        s.node(name, "RigidBody3D", properties=f'position = Vector3({ax + 6}, 1.5, {az + 6})\nmass = 0.5\nmetadata/world_entity_id = "supply_{index:02d}"\nmetadata/world_pickup = true', groups=["world_items"])
+        s.box("SupplyCase", (0, 0, 0), (0.45, 0.35, 0.35), wood, False, name)
+        shape = s.resource("BoxShape3D", "size = Vector3(0.45, 0.35, 0.35)")
+        s.node("Collision", "CollisionShape3D", name, f"shape = {shape}")
     # Imported scanned trees/rocks stay outside route corridors and door clearances.
     def route_distance(x, z):
         best = 1e9
@@ -158,30 +205,50 @@ def build():
             t = max(0, min(1, ((x-ax)*vx+(z-az)*vz)/(vx*vx+vz*vz)))
             best = min(best, math.hypot(x-ax-t*vx, z-az-t*vz))
         return best
-    for index in range(85):
-        x, z = RNG.uniform(-140, 50), RNG.uniform(-110, 125)
-        if route_distance(x,z) < 9 or any(math.hypot(x-ax,z-az)<16 for ax,az in AREAS.values()):
+    tree_positions = []
+    for index in range(1600):
+        x, z = RNG.uniform(-209, 209), RNG.uniform(-160, 190)
+        if route_distance(x,z) < 8 or any(math.hypot(x-ax,z-az)<16 for ax,az in AREAS.values()):
             continue
-        # Dense woodland to the west, sparse meadow silhouettes elsewhere.
-        if x > -50 and index % 4: continue
-        scale = RNG.uniform(1.8, 3.5)
+        # Preserve the central open meadow; build woodland belts around it.
+        if -50 < x < 65 and -35 < z < 90: continue
+        if any(math.hypot(x-px,z-pz) < 7 for px,pz in tree_positions): continue
+        tree_positions.append((x,z))
+        scale = RNG.uniform(14.0, 23.0)
         name = f"Pine_{index}"
         s.nodes.append(f'[node name="{name}" parent="." instance=ExtResource("pine_sapling_small")]\nposition = Vector3({x}, 0, {z})\nscale = Vector3({scale}, {scale}, {scale})\nrotation = Vector3(0, {RNG.uniform(0,6.28)}, 0)\n')
-    for index in range(45):
-        x, z = RNG.uniform(-145, 60), RNG.uniform(-110, 125)
-        if route_distance(x,z)<7: continue
+        if len(tree_positions) >= 115: break
+    rock_positions = []
+    for index in range(1000):
+        x, z = RNG.uniform(-210, 210), RNG.uniform(-160, 190)
+        if route_distance(x,z)<7 or any(math.hypot(x-ax,z-az)<15 for ax,az in AREAS.values()): continue
+        if any(math.hypot(x-px,z-pz)<6 for px,pz in rock_positions): continue
+        rock_positions.append((x,z))
         scale = RNG.uniform(1, 3)
         s.nodes.append(f'[node name="Rock_{index}" parent="." instance=ExtResource("boulder_01")]\nposition = Vector3({x}, 0, {z})\nscale = Vector3({scale}, {scale}, {scale})\n')
-    # Boundary walls make the map finite without allowing falls out of the world.
-    for x in (-150, 150): s.box("Cliff", (x, 5, 15), (3, 10, 270), stone)
-    for z in (-120, 150): s.box("Cliff", (0, 5, z), (300, 10, 3), stone)
+        if len(rock_positions) >= 75: break
+    # Rounded foothills frame the map instead of a visible rectangular box wall.
+    # Collision boundaries stay inside these overlapping visual mountain belts.
+    for index in range(15):
+        x = -250 + index * 36
+        for z in (-200, 230):
+            s.ellipsoid("Foothill", (x, -8, z), (RNG.uniform(35,55), RNG.uniform(20,42), 45), grass)
+            s.ellipsoid("DistantPeak", (x, -5, z * 1.35), (60, RNG.uniform(45,85), 70), distant)
+    for index in range(11):
+        z = -175 + index * 38
+        for x in (-250, 250):
+            s.ellipsoid("Foothill", (x, -9, z), (45, RNG.uniform(22,40), 45), grass)
+    for x in (-220, 220):
+        s.box("Boundary", (x, 5, 15), (1, 10, 370), stone)
+    for z in (-170, 200):
+        s.box("Boundary", (0, 5, z), (440, 10, 1), stone)
     for name, (x,z) in AREAS.items():
         s.label(name.replace("_", " ").upper(), (x, 4, z))
         s.node("Area_" + name, "Marker3D", properties=f'position = Vector3({x}, 0.5, {z})\nmetadata/area_id = "{name}"', groups=["areas"])
     s.nodes.append('[node name="Preview" parent="." instance=ExtResource("preview")]\n')
     text = '[gd_scene format=3]\n\n' + '\n'.join(ext + s.resources) + '\n[node name="AshenVale" type="Node3D"]\n\n' + '\n'.join(s.nodes)
     (ROOT / "scenes/world.tscn").write_text(text)
-    (ROOT / "map.json").write_text(json.dumps({"areas": AREAS, "routes": EDGES, "stations": STATIONS, "spawn": "camp", "exit": "guardian"}, indent=2) + '\n')
+    (ROOT / "map.json").write_text(json.dumps({"areas": AREAS, "routes": EDGES, "stations": STATIONS, "spawn": "camp", "exit": "guardian", "size_m": [440,370], "trees": len(tree_positions), "rocks": len(rock_positions), "pickup_items": 12}, indent=2) + '\n')
     print(f"Built {len(AREAS)} areas, {len(EDGES)} routes, {len(s.nodes)} scene nodes")
 
 

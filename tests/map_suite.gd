@@ -35,6 +35,11 @@ func run():
 					reached.append(other)
 					pending.append(other)
 	check(reached.size() == data.areas.size(), "entire authored route graph connected")
+	check(data.areas.size() >= 22, "expanded map includes four outer destinations")
+	check(world.find_children("Pine_*", "Node3D", false, false).size() >= 100, "landscape has at least 100 scanned trees")
+	check(world.find_children("Rock_*", "Node3D", false, false).size() >= 65, "landscape has at least 65 scanned rock clusters")
+	check(get_nodes_in_group("world_items").size() == 12, "twelve real pickup items distributed through the map")
+	check(world.find_children("Crate*", "MeshInstance3D", false, false).size() >= 30, "camp and ruins have authored prop dressing")
 	var physics = world.get_world_3d().direct_space_state
 	for edge in data.routes:
 		var a = data.areas[edge[0]]

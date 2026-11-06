@@ -20,7 +20,7 @@ def button(id, text, page):
 def world_logic(destination):
     manifest = {
         "format": "comunicare.world", "schema_version": 1,
-        "world_id": "ember-crypt-ashen-vale", "release": "0.2.0",
+        "world_id": "ember-crypt-ashen-vale", "release": "0.3.0",
         "title": "Ember Crypt — Ashen Vale", "main_scene": "scenes/world.tscn",
         "requires": {"world_api": 1, "script_api": 1},
         "script_capabilities": ["ui.local", "state.local", "storage.local", "interaction.events"],
@@ -32,7 +32,7 @@ def world_logic(destination):
         "upgrades": ("Upgrade library", "Planned run bonuses: damage, cooldown and health. Upgrade selection awaits a tested gameplay implementation using safe world logic."),
         "build": ("Current run", "Run-local notes below reset when the world reloads. They are separate from persistent player saves."),
         "milestones": ("Milestones", "No XP or achievements are granted for visiting menus. Discovery and combat progression from the author preview are not yet ported."),
-        "map": ("Map & destinations", "Camp → Field → Bridge → Village → Chapel → Forecourt → Crypt entry\nWest loop: Farm → Shrine → Woodland → Watchtower → Village\nCrypt wing: Galleries → Ossuary / Armory → Antechamber → Guardian hall\nSafe stations: Camp, Shrine, Chapel, Crypt entry"),
+        "map": ("Map & destinations", "Ashen Vale: 440 × 370 metres, 22 areas, 29 connected paths.\nCamp → Field → Bridge → Village → Chapel → Forecourt → Crypt entry\nOuter trails: Southern copse, Old quarry, North pass and Eastern grove.\nWest loop: Farm → Shrine → Woodland → Watchtower → Village\nCrypt wing: Galleries → Ossuary / Armory → Antechamber → Guardian hall\nSafe stations: Camp, Shrine, Chapel, Crypt entry\nTwelve supply cases can be carried with Comunicare pickup controls; they are not health or loot rewards."),
         "saved": ("Local player data", "This page uses Comunicare storage.local, scoped by the client to the player and world source. Saving a map note is not XP or an unlock. Local package revisions currently use distinct save namespaces."),
     }
     for key, (title, text) in descriptions.items():
@@ -66,6 +66,7 @@ def world_logic(destination):
     for station in ("camp", "shrine", "chapel", "crypt_entry", "credits"):
         write(f"logic/{station}.worldscript", {"version": 1, "events": {"use": [{"op": "menu", "page": "credits" if station == "credits" else "overview"}]}})
     write("attribution.json", credits)
+    write("map.json", json.loads((ROOT / "map.json").read_text()))
 
 
 def chunks(text, maximum):
