@@ -37,6 +37,25 @@ class LandscapeTests(unittest.TestCase):
         self.assertLessEqual(len(patches), 64)
         self.assertLessEqual(sum(len(p["blades"]) for p in patches) * 5, 120000)
 
+    def test_terrain_safe_slopes_and_flat_routes(self):
+        from terrain import height, BANKS
+        self.assertEqual(height(0, 95), 0)
+        for cx, cz, radius, rise in BANKS:
+            self.assertAlmostEqual(height(cx, cz), rise)
+            self.assertEqual(height(cx+radius, cz), 0)
+            for ix in range(-12, 13):
+                for iz in range(-12, 13):
+                    x, z = cx+ix, cz+iz
+                    self.assertLess(abs(height(x+0.1,z)-height(x,z))/0.1, 0.15)
+                    self.assertLess(abs(height(x,z+0.1)-height(x,z))/0.1, 0.15)
+        # Ground under authored roads stays flat; no collision banks at stations.
+        from build_map import AREAS, EDGES
+        for a,b in EDGES:
+            ax,az = AREAS[a]
+            bx,bz = AREAS[b]
+            for step in range(101):
+                self.assertLess(height(ax+(bx-ax)*step/100, az+(bz-az)*step/100), 0.01)
+
 
 if __name__ == "__main__":
     unittest.main()

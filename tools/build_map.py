@@ -79,6 +79,7 @@ class Scene:
 
 def build():
     from grass import write_assets
+    from terrain import BANKS, height as terrain_height, write_assets as write_terrain
     RNG.seed(83742)
     s = Scene()
     ext = ['[ext_resource type="PackedScene" path="res://scenes/preview.tscn" id="preview"]']
@@ -103,6 +104,20 @@ def build():
     wood = materials["weathered_planks"]
     path = materials["rock_path"]
     grass = materials["sparse_grass"]
+    write_terrain()
+    for index, (cx, cz, radius, rise) in enumerate(BANKS):
+        ext.append(f'[ext_resource type="ArrayMesh" path="res://assets/terrain/bank_{index}.obj" id="bank{index}"]')
+        s.node(f"EarthBank_{index}", "MeshInstance3D", properties=f'position = Vector3({cx}, 0.003, {cz})\nmesh = ExtResource("bank{index}")\nmaterial_override = {grass}')
+        # Reviewed client supports box collision only. Small low-rise cells keep
+        # surface mismatch bounded; tests verify slope and maximum step height.
+        for iz in range(8):
+            for ix in range(8):
+                x, z = cx-radius+(ix+0.5)*3, cz-radius+(iz+0.5)*3
+                y = terrain_height(x,z)
+                shape = s.resource("BoxShape3D", "size = Vector3(3, 0.4, 3)")
+                name = f"BankFloor_{index}_{ix}_{iz}"
+                s.node(name, "StaticBody3D", properties=f"position = Vector3({x}, {y-0.2}, {z})")
+                s.node("Shape", "CollisionShape3D", name, f"shape = {shape}")
     dark = s.resource("StandardMaterial3D", "albedo_color = Color(0.055, 0.075, 0.09, 1)\nroughness = 0.7")
     gold = s.resource("StandardMaterial3D", "albedo_color = Color(0.6, 0.32, 0.09, 1)\nmetallic = 0.6\nroughness = 0.4")
     distant = s.resource("StandardMaterial3D", "albedo_color = Color(0.22, 0.31, 0.29, 1)\nroughness = 1.0")
@@ -126,6 +141,8 @@ def build():
         # One aligned trail ribbon per segment avoids the sawtooth tile edges.
         s.node(f"Route_{a}_{b}", "Node3D", properties=f"position = Vector3({(ax+bx)/2}, 0.012, {(az+bz)/2})\nrotation = Vector3(0, {math.atan2(bx-ax,bz-az)}, 0)")
         s.box("Trail", (0,0,0), (4.2, 0.024, distance + 2), path, False, f"Route_{a}_{b}")
+        # Dark worn verges soften the hard path edge without alpha decals.
+        s.box("WornVerge", (0,-0.007,0), (5.4, 0.008, distance+3), materials["forest_floor"], False, f"Route_{a}_{b}")
     # Real landmark geometry: buildings have door gaps rather than solid box walls.
     def clear_wall(name, xyz, size, material=None):
         # Preserve every authored route through ruins, including diagonal links.

@@ -43,6 +43,9 @@ func run():
 	check(world.find_children("GrassPatch_*", "MeshInstance3D", false, false).size() >= 35, "real blade geometry covers meadow patches")
 	check(data.grass_blades > 12000 and data.grass_blades < 24000, "grass density within explicit budget")
 	var physics = world.get_world_3d().direct_space_state
+	for center in [Vector2(-35,48), Vector2(48,65), Vector2(-55,-12)]:
+		var hit = physics.intersect_ray(PhysicsRayQueryParameters3D.create(Vector3(center.x, 2, center.y), Vector3(center.x, -1, center.y)))
+		check(not hit.is_empty() and hit.position.y > 0.4, "rolling bank has actual elevated collision")
 	for edge in data.routes:
 		var a = data.areas[edge[0]]
 		var b = data.areas[edge[1]]

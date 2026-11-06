@@ -5,6 +5,7 @@ from pathlib import Path
 import random
 
 from build_map import AREAS, EDGES
+from terrain import height as ground_height
 
 ROOT = Path(__file__).resolve().parents[1]
 
@@ -83,6 +84,8 @@ def write_assets():
                 (x-cx-dx*0.5+bend_x*0.4, height*0.6, z-cz-dz*0.5+bend_z*0.4),
                 (x-cx+bend_x, height, z-cz+bend_z),
             ]
+            elevation = ground_height(x, z)
+            vertices = [(a, b+elevation, c) for a,b,c in vertices]
             lines += [f"v {a:.5f} {b:.5f} {c:.5f}" for a,b,c in vertices]
             start = n*5+1
             lines += [f"f {start}//1 {start+1}//1 {start+2}//1", f"f {start}//1 {start+2}//1 {start+3}//1", f"f {start+3}//1 {start+2}//1 {start+4}//1"]

@@ -67,6 +67,9 @@ func run():
 	check(int(map.size_m[0]) == 440 and int(map.size_m[1]) == 370 and map.trees >= 100 and map.rocks >= 65, "expanded scenery counts recorded in actual package")
 	check(map.grass_blades > 12000 and map.grass_patches == grass_surfaces, "grass density metadata matches real package geometry")
 	var physics = world.get_world_3d().direct_space_state
+	for center in [Vector2(-35,48), Vector2(48,65), Vector2(-55,-12)]:
+		var hit = physics.intersect_ray(PhysicsRayQueryParameters3D.create(Vector3(center.x, 2, center.y), Vector3(center.x, -1, center.y)))
+		check(not hit.is_empty() and hit.position.y > 0.4, "earth bank collision survives safe export")
 	for edge in map.routes:
 		var a = map.areas[edge[0]]
 		var b = map.areas[edge[1]]

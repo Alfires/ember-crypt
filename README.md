@@ -37,7 +37,7 @@ quality, foliage transparency and mesh-chunk draw-call cost need rendered review
 The production-loader fixture copies the chosen Comunicare world services into a
 disposable project with isolated HOME/XDG data. It checks the actual archive,
 client menu button actions, shared state, storage reopening and script stop cleanup.
-Current result: **1,899 checks pass** (mostly per-node no-script checks), not 1,899
+Current result: **2,318 checks pass** (mostly per-node no-script checks), not 2,318
 independent gameplay scenarios. Includes exported route clearance, twelve rigid
 pickup bodies and settling physics, foliage cutout settings and geometry sharing.
 It is not a full application/headset test: actual
@@ -91,6 +91,11 @@ The standalone save is not account-scoped or the Comunicare storage API.
   and credited in the world menu; no third-party grass license is implied.
   Geometry is static: no wind shader, animation or collision. This is an initial
   grass pass, not photorealistic vegetation or full terrain art completion.
+- Three original low rolling earth banks break up the meadow floor; grass follows
+  their height. Dark forest-floor verges soften road borders. `tools/terrain.py`
+  generates the banks with bounded slopes, preserving flat travel centerlines.
+  Collision uses 3 m box cells (not a smooth triangle-mesh collider), so small
+  height discrepancies/steps remain an explicit client movement-validation gate.
 - **12 pickup supply cases** distributed through camp, ruins and crypt. They export
   as real RigidBody3Ds with attached geometry/collision for Comunicare carrying;
   they do not grant healing, inventory items or XP. Actual client grip testing is
@@ -132,8 +137,8 @@ python3 tests/run.py
 Uses an isolated project/HOME/XDG copy under `/tmp/opencode`, imports assets,
 runs real Godot collision queries, progression/storage rules, actual station button
 actions and the desktop preview smoke test. Set
-`GODOT=/path/to/godot` if necessary. Current result: **423 map + 41 progression +
-56 menu assertions and four Python landscape tests, zero failures**;
+`GODOT=/path/to/godot` if necessary. Current result: **426 map + 41 progression +
+56 menu assertions and five Python landscape tests, zero failures**;
 **28 asset-file SHA-256 hashes verified**. Return codes: 0 pass, 1 assertion failure,
 2 infrastructure/engine errors. No real account, relay, microphone or XR is used.
 Route tests check centerline obstructions and sampled ground, not full capsule
@@ -165,7 +170,7 @@ safe loader. A Compatibility/Intel UHD 630 capture completed; the graphics stack
 also printed NVIDIA driver-selection warnings. This is not a performance or
 headset certification. A denser experimental foliage configuration timed out and
 was replaced with the lower-geometry tested configuration. The current grass export uses
-117 meshes, 114,678 vertices and 234,948 indices; repeated instances
+146 meshes, 117,177 vertices and 246,252 indices; repeated instances
 still incur rendering cost. No final-quality art approval is implied by screenshots.
 
 This is a first map implementation, **not final high-quality art sign-off**.
