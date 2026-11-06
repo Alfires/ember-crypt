@@ -1,9 +1,54 @@
 # Ember Crypt — Ashen Vale
 
-Independent Godot **4.7** map authoring repository. Initial exploration build,
-not a completed roguelike and not a downloadable Comunicare-safe package yet.
+Godot **4.7** authoring repository for a **Comunicare world only**, not a standalone
+game. A script-free exploration package now exports and passes tests against the
+updated Comunicare safe loader/runtime. The complete roguelike is not finished.
 
-## Open and explore
+## Build and open in Comunicare
+
+```sh
+python3 tools/package_world.py
+python3 tests/run_package.py --comunicare /path/to/comunicare
+```
+
+In Comunicare, choose **World Explorer → Open local map…** and select
+`build/ember-crypt.cworld`. Use Comunicare's own player and desktop/VR interaction
+controls near a lectern. The archive contains **no GDScript, preview player,
+project.godot, GLTF binaries or import caches**. Do not ZIP the authoring repository
+as a substitute. The output is ignored by Git and rebuilt locally.
+
+The supported package slice includes the full static map/scanned model conversion,
+spawn, four station menus, creator Credits/license text, shared run-state notes and
+a saved map-note action through **Comunicare's player/world-scoped storage.local**.
+It does not yet port author-preview exploration XP/upgrade logic. Menu pages label
+unfinished gameplay honestly rather than claiming their descriptions implement it.
+Opening a page never awards XP. Save-note success is verified by integration tests;
+the current package UI does not yet show detailed write failure/retry status.
+
+Export flattens source instances and converts texture maps to PNG and static
+geometry to bounded `.worldmesh` chunks. Triplanar projection is baked into UVs.
+Dense scans use author-side engine LOD reduction, then triangle partitioning to
+fit parser fuel limits. No client validators or sibling files are modified.
+Environment sky/fog, shadow settings, author labels and preview scripts are not
+exported; visual parity with the editor is **not** claimed. Tangent/normal-map
+quality, foliage transparency and mesh-chunk draw-call cost need rendered review.
+
+The production-loader fixture copies the chosen Comunicare world services into a
+disposable project with isolated HOME/XDG data. It checks the actual archive,
+client menu button actions, shared state, storage reopening and script stop cleanup.
+Current result: **2,293 checks pass** (mostly per-node no-script checks), not 2,293
+independent gameplay scenarios. It is not a full application/headset test: actual
+player input targeting, DataLoader transitions and client UI navigation remain
+manual/integration gates. No relay, real account, microphone or headset is started.
+The code must include `ui.local`, `state.local`, `world_menu.gd` and UI schema
+support; the older primitive-only client is incompatible despite both reporting
+world API 1. The installed client must reject unsupported capabilities.
+
+Local Comunicare packages currently scope saves by package revision; repacking
+can select a new save namespace. Published source identity/migration still needs
+a deliberate policy before progression persistence across world updates is promised.
+
+## Author-only local preview (not the delivery target)
 
 Open `project.godot` in Godot and press F6 on `scenes/world.tscn`, or F5 to run.
 Command line: `godot --path /path/to/ember-crypt`.
@@ -100,16 +145,17 @@ collision. Labels are authoring wayfinding rather than final in-world signage.
 
 The crypt is currently roofed at surface level, not excavated below terrain.
 Enemy AI/combat, guardian, objective gates, seeded encounters, healing, combat XP,
-animations, shortcuts, VR interaction and safe package conversion are **not
-implemented**. Exploration XP, local progression and run upgrade selection now
-work; calculated damage/cooldown/health stats do not yet affect combat. No
+animations and shortcuts are **not implemented**. Author-only exploration XP,
+local progression and run upgrade selection work in the local tooling, not yet in
+the Comunicare package; calculated stats do not affect combat. Package menus use
+client-provided VR presentation, but headset input remains unverified. No
 20–30 minute gameplay claim. Menus have headless behavioral tests, but rendered
 layout/accessibility and physical headset input remain manual gates.
 
 The author-side desktop preview uses trusted local GDScript. Do **not** upload this
 repository as a playable safe ZIP, disable validators or execute these scripts in
-downloaded worlds. Package publication needs conversion to the supported reviewed
-world APIs. Neither headless checks nor the Compatibility renderer validate final
+downloaded worlds. Use the explicit conversion above. Further gameplay must be
+implemented with the supported reviewed world APIs. Neither headless checks nor the Compatibility renderer validate final
 Forward Plus visuals, headset performance or comfort. Rendered art review remains open.
 
 Remote: https://github.com/Alfires/ember-crypt (`main` tracks `origin/main`).

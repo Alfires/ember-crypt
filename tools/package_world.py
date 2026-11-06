@@ -1,0 +1,109 @@
+#!/usr/bin/env python3
+"""Build a deterministic, code-free Comunicare world; author import is isolated."""
+import argparse
+import hashlib
+import json
+import os
+from pathlib import Path
+import shutil
+import subprocess
+import tempfile
+import zipfile
+
+ROOT = Path(__file__).resolve().parents[1]
+
+
+def button(id, text, page):
+    return {"id": id, "type": "button", "text": text, "entity": "camp", "actions": [{"op": "menu", "page": page}]}
+
+
+def world_logic(destination):
+    manifest = {
+        "format": "comunicare.world", "schema_version": 1,
+        "world_id": "ember-crypt-ashen-vale", "release": "0.2.0",
+        "title": "Ember Crypt — Ashen Vale", "main_scene": "scenes/world.tscn",
+        "requires": {"world_api": 1, "script_api": 1},
+        "script_capabilities": ["ui.local", "state.local", "storage.local", "interaction.events"],
+    }
+    pages = {}
+    descriptions = {
+        "overview": ("Ember Crypt", "A Comunicare world. Exploration package; combat is not implemented. Use the four lecterns to navigate these pages. No standalone player or executable world scripts are shipped."),
+        "stats": ("Character stats", "Combat, health and damage are not implemented in this package. No pretend stat upgrades are awarded."),
+        "upgrades": ("Upgrade library", "Planned run bonuses: damage, cooldown and health. Upgrade selection awaits a tested gameplay implementation using safe world logic."),
+        "build": ("Current run", "Run-local notes below reset when the world reloads. They are separate from persistent player saves."),
+        "milestones": ("Milestones", "No XP or achievements are granted for visiting menus. Discovery and combat progression from the author preview are not yet ported."),
+        "map": ("Map & destinations", "Camp → Field → Bridge → Village → Chapel → Forecourt → Crypt entry\nWest loop: Farm → Shrine → Woodland → Watchtower → Village\nCrypt wing: Galleries → Ossuary / Armory → Antechamber → Guardian hall\nSafe stations: Camp, Shrine, Chapel, Crypt entry"),
+        "saved": ("Local player data", "This page uses Comunicare storage.local, scoped by the client to the player and world source. Saving a map note is not XP or an unlock. Local package revisions currently use distinct save namespaces."),
+    }
+    for key, (title, text) in descriptions.items():
+        pages[key] = {"title": title, "widgets": [{"id": "description", "type": "text", "text": text}]}
+    for key in ("overview", "build"):
+        pages[key]["widgets"].append({"id": "run_note", "type": "text", "bind": "state.note"})
+    pages["build"]["widgets"].append({"id": "set_note", "type": "button", "text": "Mark this run: exploring Ashen Vale", "entity": "camp", "actions": [{"op": "state_set", "key": "note", "value": "Exploring Ashen Vale"}]})
+    pages["saved"]["widgets"] += [
+        {"id": "saved_note", "type": "text", "bind": "saved.map_note"},
+        {"id": "remember", "type": "button", "text": "Save map note on this PC", "entity": "camp", "actions": [{"op": "save_set", "key": "map_note", "value": "Ashen Vale routes reviewed"}]},
+    ]
+    credits = json.loads((ROOT / "assets/provenance.json").read_text())
+    pages["credits"] = {"title": "Asset creator Credits", "widgets": [
+        {"id": "credit" + str(index), "type": "text", "text": f"{asset['title']}\nCreator: {asset['author']}\n{asset['license']}\n{asset['source']}"}
+        for index, asset in enumerate(credits["assets"])
+    ]}
+    pages["license"] = {"title": "CC0 license", "widgets": [{"id": "terms" + str(index), "type": "text", "text": chunk} for index, chunk in enumerate(chunks((ROOT / "assets/licenses/CC0-1.0.txt").read_text(), 1800))]}
+    for key, page in pages.items():
+        if key == "overview":
+            destinations = [name for name in pages if name != "overview"]
+        else:
+            destinations = ["overview"]
+        for target in destinations:
+            page["widgets"].append(button("go_" + target, pages[target]["title"], target))
+    def write(path, value):
+        target = destination / path
+        target.parent.mkdir(parents=True, exist_ok=True)
+        target.write_text(json.dumps(value, ensure_ascii=False, indent=2) + "\n")
+    write("manifest.json", manifest)
+    write("ui/menu.worldui", {"version": 1, "pages": pages})
+    for station in ("camp", "shrine", "chapel", "crypt_entry", "credits"):
+        write(f"logic/{station}.worldscript", {"version": 1, "events": {"use": [{"op": "menu", "page": "credits" if station == "credits" else "overview"}]}})
+    write("attribution.json", credits)
+
+
+def chunks(text, maximum):
+    return [text[index:index + maximum] for index in range(0, len(text), maximum)]
+
+
+def build(output):
+    with tempfile.TemporaryDirectory(prefix="ember-export-", dir="/tmp/opencode") as folder:
+        folder = Path(folder)
+        project = folder / "author"
+        shutil.copytree(ROOT, project, ignore=shutil.ignore_patterns(".git", ".godot", "*.import", "__pycache__", "build"))
+        stage = folder / "package"
+        stage.mkdir()
+        env = os.environ.copy()
+        for key in ("HOME", "XDG_DATA_HOME", "XDG_CONFIG_HOME", "XDG_CACHE_HOME"):
+            location = folder / key
+            location.mkdir()
+            env[key] = str(location)
+        for args in (["--editor", "--import"], ["--script", "res://tools/export_world.gd", "--", str(stage)]):
+            result = subprocess.run([os.environ.get("GODOT", "godot"), "--headless", "--path", str(project), *args], capture_output=True, text=True, env=env, timeout=240)
+            log = result.stdout + result.stderr
+            if "--editor" not in args or result.returncode or "ERROR:" in log:
+                print(log)
+            if result.returncode or "ERROR:" in log:
+                raise RuntimeError("Author-side safe export failed")
+        world_logic(stage)
+        output.parent.mkdir(parents=True, exist_ok=True)
+        with zipfile.ZipFile(output, "w", zipfile.ZIP_DEFLATED, compresslevel=9) as archive:
+            for path in sorted(stage.rglob("*")):
+                if path.is_file():
+                    info = zipfile.ZipInfo(path.relative_to(stage).as_posix(), (2026, 1, 1, 0, 0, 0))
+                    info.compress_type = zipfile.ZIP_DEFLATED
+                    archive.writestr(info, path.read_bytes())
+        print(f"Package: {output}\nSHA-256: {hashlib.sha256(output.read_bytes()).hexdigest()}")
+
+
+if __name__ == "__main__":
+    parser = argparse.ArgumentParser(description=__doc__)
+    parser.add_argument("--output", type=Path, default=ROOT / "build/ember-crypt.cworld")
+    args = parser.parse_args()
+    build(args.output.resolve())
